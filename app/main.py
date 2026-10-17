@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
 from datetime import date
 from typing import Annotated, Any, Literal
 
@@ -12,33 +13,48 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict
 
+from app import db
 from app.cache import make_etag
 from app.head import HeadAsGetMiddleware
 from app.models import GameMeta, Hero, MapFeature, Mode, Subclass
+from app.routes_matches import router as matches_router
 from app.store import get_dataset
 
-APP_VERSION = "0.1.0"
+APP_VERSION = "0.2.0"
 CACHE_CONTROL = "public, max-age=60"
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):  # type: ignore[no-untyped-def]
+    db.init_db()
+    yield
+
 
 app = FastAPI(
     title="Overwatch Rush API",
     version=APP_VERSION,
-    summary="Community-Datenset zu Overwatch Rush (Blizzard) – quellenbasiert, ohne Spieldateien.",
+    summary="Overwatch-Rush-Datenset plus selbst gemeldete Match-Statistiken.",
     description=(
-        "Read-only API mit verifizierten Stammdaten zu Overwatch Rush.\n\n"
-        "Jeder Datensatz nennt seine Quellen. Es werden **keine** APK/XAPK-Dateien "
-        "verteilt. Felder ohne belastbare Quelle bleiben leer statt geraten zu werden."
+        "Referenzdaten zu Overwatch Rush **plus** ein selbst geführtes Match-Log.\n\n"
+        "- Stammdaten: quellenbasiert, keine erfundenen Werte.\n"
+        "- Match-Stats: **self-reported** – es gibt keine offizielle Blizzard-API, "
+        "also speichert der Dienst nur, was du selbst einträgst.\n"
+        "- Es werden **keine** APK/XAPK-Dateien verteilt."
     ),
     license_info={"name": "MIT"},
+    lifespan=lifespan,
 )
 
 app.add_middleware(HeadAsGetMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["GET", "HEAD", "OPTIONS"],
+    allow_methods=["GET", "HEAD", "OPTIONS", "POST", "DELETE"],
     allow_headers=["*"],
 )
+
+
+app.include_router(matches_router)
 
 
 # --------------------------------------------------------------------------- #
@@ -154,7 +170,7 @@ async def cache_headers(request: Request, call_next):  # type: ignore[no-untyped
     if request.method == "GET" and response.status_code == 200 and is_json:
         dataset = get_dataset()
         etag = make_etag(
-            dataset.game.data_version,
+            f"{dataset.game.data_version}.r{db.revision()}",
             dataset.game.updated_at.isoformat(),
             request.url.path,
             list(request.query_params.multi_items()),
@@ -217,6 +233,7 @@ def root() -> HTMLResponse:
             ("/v1/maps", "Maps", f"{len(dataset.maps)} Arenen"),
             ("/v1/roles", "Subklassen", f"{len(dataset.roles)} Rollen"),
             ("/v1/meta", "Spiel-Metadaten", "Soft Launch, Anforderungen, Quellen"),
+            ("/v1/players", "Spieler-Statistiken", "selbst gemeldete Matches"),
             ("/health", "Health", "Status und Datenversion"),
         )
     )
