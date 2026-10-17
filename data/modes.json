@@ -1,0 +1,58 @@
+[
+  {
+    "slug": "4v4-pvp",
+    "name": "4v4 PvP",
+    "team_size": 4,
+    "teams": 2,
+    "objective": "Kern-Teammodus der Soft-Launch-Version.",
+    "description": "Zwei Teams mit je vier Heldinnen und Helden treten in kurzen Top-Down-Gefechten an.",
+    "sources": [
+      "https://news.blizzard.com/en-us/article/24244645/development-update-overwatch-rush",
+      "https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "3v3-control",
+    "name": "3v3 Control",
+    "team_size": 3,
+    "teams": 2,
+    "objective": "Objektive erobern und halten, angepasst auf kleinere Teams.",
+    "description": "Eine Adaption des Control-Formats aus Overwatch für drei Spieler pro Seite.",
+    "sources": [
+      "https://redreactions.com/articles/overwatch-rush-explained/",
+      "https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "duo-free-for-all",
+    "name": "Duo Free for All",
+    "team_size": 2,
+    "teams": 3,
+    "objective": "Drei Zweier-Teams gegeneinander, jeder gegen jeden.",
+    "description": "Free-for-All-Variante, in der drei Duos gleichzeitig in derselben Arena kämpfen.",
+    "sources": [
+      "https://redreactions.com/articles/overwatch-rush-explained/",
+      "https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "solo-free-for-all",
+    "name": "Solo Free for All",
+    "team_size": 1,
+    "teams": null,
+    "objective": "Jeder gegen jeden ohne Team.",
+    "description": "Solo-PvP-Variante; laut Blizzard-Wortlaut kein Einzelspieler-Storymodus.",
+    "sources": [
+      "https://redreactions.com/articles/overwatch-rush-explained/",
+      "https://play.google.com/store/apps/details?id=com.blizzard.overwatch.rush"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "medium"
+  }
+]

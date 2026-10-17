@@ -1,0 +1,57 @@
+[
+  {
+    "slug": "assassin",
+    "name": "Assassin",
+    "description": "Auf Flanken und schnelle Einzelkills ausgelegt.",
+    "playstyle": "Flankieren, überraschend zuschlagen, hoher Burst-Schaden.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://vpesports.com/games/overwatch/overwatch-rush-heroes"
+    ],
+    "verified_at": "2026-10-17"
+  },
+  {
+    "slug": "fighter",
+    "name": "Fighter",
+    "description": "Frontaler Nah- bis Mittelkampf mit hoher Standfestigkeit.",
+    "playstyle": "Vorpushen, Druck aufbauen, Gefechte binden.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://vpesports.com/games/overwatch/overwatch-rush-heroes"
+    ],
+    "verified_at": "2026-10-17"
+  },
+  {
+    "slug": "long_ranger",
+    "name": "Long Ranger",
+    "description": "Fernkampf und Kontrolle von Sichtlinien.",
+    "playstyle": "Distanz halten, Lanes kontrollieren, Ziele unter Druck setzen.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://vpesports.com/games/overwatch/overwatch-rush-heroes"
+    ],
+    "verified_at": "2026-10-17"
+  },
+  {
+    "slug": "utility",
+    "name": "Utility",
+    "description": "Unterstützung, Heilung und Kontrollwerkzeuge für das Team.",
+    "playstyle": "Team versorgen, Flanken unterstützen, Kämpfe drehen.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://vpesports.com/games/overwatch/overwatch-rush-heroes"
+    ],
+    "verified_at": "2026-10-17"
+  },
+  {
+    "slug": "vanguard",
+    "name": "Vanguard",
+    "description": "Frontline mit hoher Zähigkeit; entspricht am ehesten der Tank-Rolle im Hauptspiel.",
+    "playstyle": "Raum schaffen, Schaden abfangen, Team nach vorn bringen.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"
+    ],
+    "verified_at": "2026-10-17"
+  }
+]
