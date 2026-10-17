@@ -1,0 +1,12 @@
+{
+  "name": "overwatch-rush-api-dom-tests",
+  "private": true,
+  "type": "module",
+  "description": "jsdom smoke test for the standalone docs/index.html explorer",
+  "scripts": {
+    "test": "node check.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.3"
+  }
+}

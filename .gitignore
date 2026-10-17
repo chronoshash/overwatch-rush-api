@@ -1,0 +1,28 @@
+# --- never commit game binaries (Blizzard IP) ---
+*.apk
+*.xapk
+*.apks
+*.aab
+*.obb
+*.zip
+tmp/
+data/incoming/
+var/
+assets/
+extracted/
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# --- editors / os ---
+.idea/
+.vscode/
+.DS_Store

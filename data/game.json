@@ -1,0 +1,53 @@
+{
+  "name": "Overwatch Rush",
+  "package_id": "com.blizzard.overwatch.rush",
+  "developer": "Blizzard Entertainment",
+  "publisher": "Blizzard Entertainment",
+  "genre": "Top-down hero shooter",
+  "perspective": "top-down",
+  "price_model": "free-to-play",
+  "platforms": ["android", "ios"],
+  "release_stage": "soft_launch",
+  "soft_launch": {
+    "started": "2026-08-31",
+    "regions": ["ID", "MY", "PH"],
+    "platforms": ["android", "ios"]
+  },
+  "match_formats": ["solo-free-for-all", "duo-free-for-all", "3v3-control", "4v4-pvp"],
+  "controller_support": false,
+  "party_support": false,
+  "party_support_note": "Play-Store-Listing nennt Party-Play mit Freunden als 'coming soon'.",
+  "approximate_download_gb": 1.4,
+  "min_requirements": {
+    "android_ram_gb": 3,
+    "android_min_device": "Samsung Galaxy A14 5G",
+    "android_chipsets": [
+      "Snapdragon 480",
+      "Snapdragon 675",
+      "Snapdragon 720G",
+      "Snapdragon 730",
+      "Snapdragon 765",
+      "MediaTek Dimensity 6XXX",
+      "MediaTek Dimensity 7XXX",
+      "MediaTek Dimensity 8XXX",
+      "MediaTek Helio G9X",
+      "Exynos 980",
+      "Exynos 1380"
+    ],
+    "ios_min_device": "iPhone SE (2. Generation)",
+    "ios_min_chip": "A12 Bionic"
+  },
+  "progression": "Hero Levels (heldengebundene Progression, Loadout-Anpassung)",
+  "global_release_date": null,
+  "global_release_note": "Blizzard hat keinen globalen Release-Termin angekündigt.",
+  "data_version": "2026.10.17",
+  "updated_at": "2026-10-17",
+  "disclaimer": "Community-Datenset ohne offizielle API von Blizzard. Overwatch ist eine Marke von Blizzard Entertainment. Dieses Projekt verteilt keine Spieldateien.",
+  "sources": [
+    "https://news.blizzard.com/en-us/article/24244645/development-update-overwatch-rush",
+    "https://play.google.com/store/apps/details?id=com.blizzard.overwatch.rush",
+    "https://apps.apple.com/id/app/overwatch-rush/id6758123632",
+    "https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/",
+    "https://www.esportsinsider.com/how-to-play-overwatch-rush"
+  ]
+}

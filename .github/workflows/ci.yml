@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "arena/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Format check
+        run: ruff format --check .
+
+      - name: Tests
+        run: pytest -q
+
+      - name: Static page is up to date
+        run: python scripts/build_static.py --check
+
+      - name: Guard against committed game binaries
+        run: |
+          if git ls-files | grep -Ei '\.(apk|xapk|apks|aab|obb)$'; then
+            echo "::error::Game binaries must never be committed to this repository."
+            exit 1
+          fi
+          echo "no game binaries tracked"
+
+  dom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install jsdom
+        run: npm ci --prefix tests/dom --no-audit --no-fund
+
+      - name: Rebuild standalone page (stdlib only)
+        run: python3 scripts/build_static.py
+
+      - name: DOM smoke test
+        run: node tests/dom/check.mjs

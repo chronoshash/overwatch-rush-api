@@ -1,0 +1,41 @@
+[
+  {
+    "slug": "narwhal-cove",
+    "name": "Narwhal Cove",
+    "inspired_by": "Watchpoint: Gibraltar",
+    "built_from_scratch": true,
+    "setting": "Küsten-/Militäranlage",
+    "sources": [
+      "https://redreactions.com/articles/overwatch-rush-explained/",
+      "https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "hydronet-gardens",
+    "name": "Hydronet Gardens",
+    "inspired_by": "Kairo",
+    "built_from_scratch": true,
+    "setting": "Garten-/Wasseranlage",
+    "sources": [
+      "https://redreactions.com/articles/overwatch-rush-explained/",
+      "https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "mansion-portero",
+    "name": "Mansión Portero",
+    "inspired_by": "Dorado",
+    "built_from_scratch": true,
+    "setting": "Anwesen in Dorado-Optik",
+    "sources": [
+      "https://redreactions.com/articles/overwatch-rush-explained/",
+      "https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  }
+]

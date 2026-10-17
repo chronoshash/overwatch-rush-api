@@ -1,0 +1,210 @@
+[
+  {
+    "slug": "brigitte",
+    "name": "Brigitte",
+    "aliases": [],
+    "subclass": "vanguard",
+    "overwatch_class": "support",
+    "status": "live",
+    "first_playable": "2026-08-31",
+    "abilities": [
+      { "slug": "shield-bash", "name": "Shield Bash", "kind": "ability" },
+      { "slug": "whip-shot", "name": "Whip Shot", "kind": "ability" }
+    ],
+    "notes": "Neunte Heldin; für Rush zum Vanguard umgebaut, kombiniert Frontline-Zähigkeit mit Nahkampf-Druck.",
+    "sources": [
+      "https://play.google.com/store/apps/details?id=com.blizzard.overwatch.rush",
+      "https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month",
+      "https://esportsinsider.com/overwatch-rush-heroes"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "kiriko",
+    "name": "Kiriko",
+    "aliases": [],
+    "subclass": "utility",
+    "overwatch_class": "support",
+    "status": "live",
+    "first_playable": null,
+    "abilities": [],
+    "notes": "Teil des Launch-Rosters der Soft-Launch-Phase.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "lucio",
+    "name": "Lúcio",
+    "aliases": ["lucio"],
+    "subclass": "utility",
+    "overwatch_class": "support",
+    "status": "live",
+    "first_playable": null,
+    "abilities": [],
+    "notes": "Wurde im Rahmen des Soft-Launch-Updates überarbeitet.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "mercy",
+    "name": "Mercy",
+    "aliases": [],
+    "subclass": "utility",
+    "overwatch_class": "support",
+    "status": "live",
+    "first_playable": null,
+    "abilities": [],
+    "notes": "Nutzt in Rush primär ihren Blaster statt des Caduceus-Stabs.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://gameinformer.com/preview/2026/02/24/blizzards-first-person-hero-shooter-goes-top-down"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "pharah",
+    "name": "Pharah",
+    "aliases": [],
+    "subclass": "long_ranger",
+    "overwatch_class": "damage",
+    "status": "live",
+    "first_playable": null,
+    "abilities": [],
+    "notes": "Teil des Launch-Rosters der Soft-Launch-Phase.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "reaper",
+    "name": "Reaper",
+    "aliases": [],
+    "subclass": "assassin",
+    "overwatch_class": "damage",
+    "status": "live",
+    "first_playable": null,
+    "abilities": [],
+    "notes": "Teil des Launch-Rosters der Soft-Launch-Phase.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "reinhardt",
+    "name": "Reinhardt",
+    "aliases": [],
+    "subclass": "vanguard",
+    "overwatch_class": "tank",
+    "status": "live",
+    "first_playable": null,
+    "abilities": [],
+    "notes": "Schildmechanik für Touch angepasst (Wischen zum Reflektieren eingehender Projektile).",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://vpesports.com/games/overwatch/overwatch-rush-heroes"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "soldier-76",
+    "name": "Soldier: 76",
+    "aliases": ["soldier 76", "soldier76", "s76"],
+    "subclass": "fighter",
+    "overwatch_class": "damage",
+    "status": "live",
+    "first_playable": null,
+    "abilities": [],
+    "notes": "Epic-Skin 'Kingpin' ist Teil des Tutorial-Bundles.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "tracer",
+    "name": "Tracer",
+    "aliases": [],
+    "subclass": "assassin",
+    "overwatch_class": "damage",
+    "status": "live",
+    "first_playable": null,
+    "abilities": [],
+    "notes": "Teil des Launch-Rosters der Soft-Launch-Phase.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "high"
+  },
+  {
+    "slug": "doomfist",
+    "name": "Doomfist",
+    "aliases": [],
+    "subclass": "fighter",
+    "overwatch_class": "tank",
+    "status": "upcoming",
+    "first_playable": null,
+    "abilities": [],
+    "notes": "Von Blizzard angekündigt, zum Stichtag noch nicht spielbar. Subklasse laut Sekundärbericht.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://overwatch.fandom.com/wiki/Overwatch_Rush"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "medium"
+  },
+  {
+    "slug": "genji",
+    "name": "Genji",
+    "aliases": [],
+    "subclass": "assassin",
+    "overwatch_class": "damage",
+    "status": "upcoming",
+    "first_playable": null,
+    "abilities": [],
+    "notes": "Von Blizzard angekündigt, zum Stichtag noch nicht spielbar. Subklasse laut Sekundärbericht.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://overwatch.fandom.com/wiki/Overwatch_Rush"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "medium"
+  },
+  {
+    "slug": "hanzo",
+    "name": "Hanzo",
+    "aliases": [],
+    "subclass": "long_ranger",
+    "overwatch_class": "damage",
+    "status": "upcoming",
+    "first_playable": null,
+    "abilities": [],
+    "notes": "Von Blizzard angekündigt, zum Stichtag noch nicht spielbar. Subklasse laut Sekundärbericht.",
+    "sources": [
+      "https://esportsinsider.com/overwatch-rush-heroes",
+      "https://overwatch.fandom.com/wiki/Overwatch_Rush"
+    ],
+    "verified_at": "2026-10-17",
+    "confidence": "medium"
+  }
+]
