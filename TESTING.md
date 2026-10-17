@@ -94,9 +94,18 @@ Der Report enthält nur Metadaten; das Paket wurde nicht kopiert
 `ruff check`, `ruff format --check`, `pytest`, plus Guard gegen committete
 Spiel-Binaries (`git ls-files | grep -E '\.(apk|xapk|apks|aab|obb)$'`).
 
+Verifizierter Lauf (2026-10-17, Run 39044815131):
+
+```
+test (3.11)   pass   13s
+test (3.12)   pass   12s
+```
+
+https://github.com/chronoshash/overwatch-rush-api/actions/runs/39044815131
+
 ## Nicht getestet / offen
 
-- Python 3.12 lokal (nur CI-Matrix, kein lokaler Nachweis).
+- Python 3.12: in CI grün, lokal nicht separat ausgeführt (Sandbox hat 3.11).
 - iOS-Daten (App Store) nur als Quelle, kein eigenes Feld.
 - `aapt2`-Pfad im Ingest-Skript ist implementiert, aber im Sandbox nicht
   verfügbar (kein Java) → Zweig ungetestet, wird sauber als `None` gemeldet.
