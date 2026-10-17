@@ -80,12 +80,21 @@ Fehler: `{ "error": { code, message, detail } }`.
 5. Kein `*.apk`/`*.xapk`/`*.obb` im Git-Index.
 6. CI (GitHub Actions) führt `ruff` + `pytest` auf Python 3.11 aus.
 
-## 8. Versionierung
+## 8. Statischer Export
+
+`scripts/build_static.py` erzeugt `docs/index.html` aus `data/*.json`:
+vollständig self-contained (Inline-CSS/JS, eingebettetes JSON, keine externen
+Requests), damit die Daten ohne Server, ohne Proxy und ohne CDN lesbar sind.
+
+- Erfolgskriterium: `--check` ist grün, d. h. die Datei entspricht exakt dem Datenset.
+- Die Seite ist Anzeige, keine zweite Datenquelle: Änderungen nur in `data/`.
+
+## 9. Versionierung
 
 `data_version` (Datum) + `app_version` in `/v1/meta` und `/health`.
 Breaking Changes nur unter `/v2`.
 
-## 9. Bekannte Einschränkungen
+## 10. Bekannte Einschränkungen
 
 - Ability-Daten sind leer (keine belastbare öffentliche Quelle für Rush-Kits;
   Kits weichen laut Blizzard bewusst von Overwatch 2 ab).

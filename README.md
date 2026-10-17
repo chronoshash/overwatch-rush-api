@@ -27,6 +27,17 @@ ruff check .      # Lint
 ruff format --check .
 ```
 
+## Ohne Server ansehen
+
+`docs/index.html` ist eine **komplett statische** Variante (Daten eingebettet,
+kein CDN, kein JS-Framework) mit Suche, Subklassen-Filter und Tabs für Helden,
+Modi und Maps. Direkt im Browser öffnen – funktioniert auch per `file://`.
+
+```bash
+python scripts/build_static.py          # neu generieren
+python scripts/build_static.py --check  # in CI: schlägt bei veralteter Datei fehl
+```
+
 ## Endpunkte
 
 | Methode | Pfad | Beschreibung |

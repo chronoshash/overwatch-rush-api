@@ -36,6 +36,9 @@ jobs:
       - name: Tests
         run: pytest -q
 
+      - name: Static page is up to date
+        run: python scripts/build_static.py --check
+
       - name: Guard against committed game binaries
         run: |
           if git ls-files | grep -Ei '\.(apk|xapk|apks|aab|obb)$'; then
