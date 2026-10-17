@@ -49,6 +49,22 @@ Bekannte Warnung (harmlos, Upstream):
 `StarletteDeprecationWarning: Using httpx with starlette.testclient is deprecated; install httpx2 instead.`
 Kein Testfehler; kann nach Migration des Testclients entfernt werden.
 
+## Betriebs-Nachweis (Preview auf 8000)
+
+```
+$ ss -ltnp | grep :8000
+LISTEN 0 2048 0.0.0.0:8000 0.0.0.0:* users:(("python",pid=2635,fd=15))
+
+$ bash scripts/serve.sh
+serving /home/user/overwatch-rush-api on http://0.0.0.0:8000 (python: Python 3.11.2)
+```
+
+Dabei behobene Setup-Fehler:
+- verwaister `python3 -m http.server 8099` (PPID 1, Leak aus einem Test) beendet
+- `scripts/serve.sh` führt `--proxy-headers --forwarded-allow-ips='*'` mit, damit
+  der Preview-Proxy korrekte `X-Forwarded-*`-Werte durchreicht
+- `exec` im Skript, damit der Prozessbaum beim Neustart sauber bleibt
+
 ## Live-HTTP-Nachweis
 
 Server: `uvicorn app.main:app --host 0.0.0.0 --port 8000`
@@ -71,6 +87,9 @@ status=304 bytes=0
 $ curl localhost:8000/v1/heroes/nobody   → 404 {"error":{"code":"hero_not_found",...}}
 $ curl "localhost:8000/v1/heroes?subclass=tank" → 400 {"error":{"code":"unknown_subclass",...}}
 $ curl localhost:8000/docs → 200   /openapi.json → 200
+
+Proxy-Simulation (Host = Preview-Domain, X-Forwarded-Proto: https, Origin gesetzt):
+→ 200, content-type text/html, access-control-allow-origin: *, kein X-Frame-Options
 
 $ curl -I localhost:8000/          → 200 (vorher 405, siehe unten)
 $ curl -I localhost:8000/v1/heroes → 200, content-length 5774

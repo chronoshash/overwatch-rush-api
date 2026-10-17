@@ -17,8 +17,9 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements-dev.txt
 
-uvicorn app.main:app --host 0.0.0.0 --port 8000
-# -> http://localhost:8000/docs
+bash scripts/serve.sh
+# -> http://localhost:8000  (Startseite)  ·  /docs (OpenAPI)
+# anderer Port:  PORT=8080 bash scripts/serve.sh
 ```
 
 ```bash
@@ -26,6 +27,19 @@ pytest            # 33 Tests
 ruff check .      # Lint
 ruff format --check .
 ```
+
+### Warum `scripts/serve.sh` statt `uvicorn` direkt?
+
+Der Dienst läuft hinter einem Preview-Proxy, deshalb setzt das Skript:
+
+- `--host 0.0.0.0` – sonst ist der Port von außen nicht erreichbar
+- `--proxy-headers --forwarded-allow-ips='*'` – `X-Forwarded-Proto/Host` werden
+  respektiert, statt Container-lokaler Werte
+- `--timeout-keep-alive 65` – hält Verbindungen für Proxies offen
+- `exec` – uvicorn ersetzt die Shell, Signale/Exit-Codes kommen sauber an
+
+Bei fehlenden Abhängigkeiten bricht es mit einer klaren Anleitung ab, statt
+mit `ImportError`.
 
 ## Ohne Server ansehen
 

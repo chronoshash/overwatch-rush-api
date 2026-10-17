@@ -35,6 +35,12 @@ Regeln für Agenten, die in diesem Repo arbeiten. Gültig ab 2026-10-17.
 - Bei widersprüchlichen Quellen: Primärquelle (Blizzard/Store) gewinnt,
   Widerspruch in `notes` dokumentieren.
 
+## Server starten
+
+Immer `bash scripts/serve.sh` (setzt Proxy-Header, bindet `0.0.0.0`, nutzt `exec`).
+Kein `uvicorn ... &` aus einer Bash-Zelle – verwaiste Prozesse überleben und
+blockieren Ports. Nach dem Stoppen prüfen: `ss -ltn | grep 8000`.
+
 ## Verifikation
 
 ```bash
