@@ -24,11 +24,11 @@ ruff format --check .
 pytest -q
 ```
 
-## Testabdeckung (30 Tests)
+## Testabdeckung (32 Tests)
 
 | Datei | Prüft |
 |---|---|
-| `tests/test_api.py` | Health, Meta, Filter (`subclass`, `status`, `q`), Alias-Lookup, Pagination, 400/404/422-Envelopes, Suche, ETag/304, CORS, OpenAPI |
+| `tests/test_api.py` | Startseite `/`, JSON-Index `/v1`, Health, Meta, Filter (`subclass`, `status`, `q`), Alias-Lookup, Pagination, 400/404/422-Envelopes, Suche, ETag/304, CORS, OpenAPI |
 | `tests/test_data.py` | Quellen-Pflicht (https), Subklassen-Referenzen, 9 live + 3 upcoming, nur belegte Abilities, `data_version`-Format, **Binary-Guard** (keine `.apk`/`.xapk` im Tree) |
 | `tests/test_ingest.py` | XAPK-Manifest-Parsing, APK ohne Manifest, fehlende Datei (Exit 2), Nicht-ZIP (Exit 3), CLI-Ausgabe, Pfad-Traversal-Schutz beim Entpacken |
 
@@ -42,7 +42,7 @@ $ ruff format --check .
 13 files already formatted
 
 $ pytest
-30 passed, 1 warning in 0.14s
+32 passed, 1 warning in 0.17s
 ```
 
 Bekannte Warnung (harmlos, Upstream):

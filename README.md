@@ -22,7 +22,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
 ```bash
-pytest            # 30 Tests
+pytest            # 32 Tests
 ruff check .      # Lint
 ruff format --check .
 ```
@@ -31,6 +31,8 @@ ruff format --check .
 
 | Methode | Pfad | Beschreibung |
 |---|---|---|
+| GET | `/` | HTML-Startseite mit Links zu allen Endpunkten |
+| GET | `/v1` | Maschinenlesbarer Endpunkt-Index (JSON) |
 | GET | `/health` | Liveness, Datenversion, Anzahl Datensätze |
 | GET | `/v1/meta` | Spiel-Metadaten: Paket-ID, Soft-Launch-Regionen, Mindestanforderungen |
 | GET | `/v1/heroes` | Helden; Filter `subclass`, `status`, `q`; `limit`/`offset` |
@@ -126,7 +128,7 @@ app/
   cache.py       ETag-Berechnung
 data/            Das eigentliche Datenset (JSON, versioniert)
 scripts/         fetch_xapk.sh (lokal), ingest_local.py (Metadaten)
-tests/           30 Tests: API, Datenintegrität, Ingest, Binary-Guard
+tests/           32 Tests: API, Datenintegrität, Ingest, Binary-Guard
 ```
 
 Datenänderungen erfolgen in `data/*.json`; `pytest` erzwingt danach gültige

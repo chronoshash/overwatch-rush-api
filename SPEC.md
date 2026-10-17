@@ -48,6 +48,8 @@ mit `confidence: medium` markiert.
 
 | Methode | Pfad | Beschreibung |
 |---|---|---|
+| GET | `/` | HTML-Startseite (Übersicht, Links) |
+| GET | `/v1` | JSON-Index der Endpunkte |
 | GET | `/health` | Liveness + Dataset-Version |
 | GET | `/v1/meta` | Spiel-Metadaten, Soft-Launch, Anforderungen, Disclaimer |
 | GET | `/v1/heroes` | Liste; Filter `subclass`, `status`, `q`; Pagination `limit`/`offset` |

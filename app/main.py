@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException, Path, Query, Request, Response
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict
 
 from app.cache import make_etag
@@ -202,7 +202,71 @@ async def validation_error_handler(request: Request, exc: RequestValidationError
 # Endpoints
 # --------------------------------------------------------------------------- #
 @app.get("/", include_in_schema=False)
-def root() -> dict[str, Any]:
+def root() -> HTMLResponse:
+    dataset = get_dataset()
+    live = sum(1 for hero in dataset.heroes if hero.status == "live")
+    upcoming = len(dataset.heroes) - live
+    cards = "".join(
+        f'<a class="card" href="{href}"><strong>{label}</strong><span>{desc}</span></a>'
+        for href, label, desc in (
+            ("/docs", "OpenAPI-Dokumentation", "Interaktiv alle Endpunkte testen"),
+            ("/v1/heroes", "Helden", f"{live} spielbar, {upcoming} angekündigt"),
+            ("/v1/modes", "Spielmodi", f"{len(dataset.modes)} Formate"),
+            ("/v1/maps", "Maps", f"{len(dataset.maps)} Arenen"),
+            ("/v1/roles", "Subklassen", f"{len(dataset.roles)} Rollen"),
+            ("/v1/meta", "Spiel-Metadaten", "Soft Launch, Anforderungen, Quellen"),
+            ("/health", "Health", "Status und Datenversion"),
+        )
+    )
+    html = f"""<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Overwatch Rush API</title>
+<style>
+  :root {{ color-scheme: dark; }}
+  * {{ box-sizing: border-box; }}
+  body {{ margin: 0; min-height: 100vh; display: grid; place-items: center;
+         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+         background: radial-gradient(1200px 600px at 20% -10%, #1f3a5f 0%, #0b1220 55%, #070b12 100%);
+         color: #e6edf7; padding: 32px 20px; }}
+  main {{ width: min(860px, 100%); }}
+  .badge {{ display: inline-block; font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+            color: #8fd3ff; border: 1px solid #2b4a6b; border-radius: 999px; padding: 4px 12px; }}
+  h1 {{ font-size: clamp(28px, 5vw, 44px); margin: 16px 0 8px; }}
+  p.lead {{ color: #9fb0c6; margin: 0 0 28px; max-width: 62ch; line-height: 1.6; }}
+  .grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }}
+  .card {{ display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; text-decoration: none;
+           color: inherit; background: rgba(255,255,255,.04); border: 1px solid #22314a;
+           border-radius: 14px; transition: .15s border-color, .15s transform; }}
+  .card:hover {{ border-color: #3d6ea0; transform: translateY(-2px); }}
+  .card strong {{ font-size: 15px; }}
+  .card span {{ font-size: 13px; color: #8fa1b8; }}
+  footer {{ margin-top: 28px; font-size: 12px; color: #6f819a; line-height: 1.6; }}
+  code {{ background: rgba(255,255,255,.06); padding: 1px 6px; border-radius: 6px; }}
+</style>
+</head>
+<body>
+<main>
+  <span class="badge">v{APP_VERSION} · data {dataset.game.data_version}</span>
+  <h1>Overwatch Rush API</h1>
+  <p class="lead">Quellenbasierte Stammdaten zu Overwatch Rush. Read-only, kein Login.
+     Dieses Projekt verteilt keine Spieldateien.</p>
+  <div class="grid">{cards}</div>
+  <footer>
+    Kurztest: <code>curl {"/v1/heroes?subclass=vanguard"}</code> ·
+    Fehler kommen als <code>{{"error": {{"code": ...}}}}</code> ·
+    Jede JSON-Antwort trägt <code>ETag</code>.
+  </footer>
+</main>
+</body>
+</html>"""
+    return HTMLResponse(html)
+
+
+@app.get("/v1", include_in_schema=False)
+def api_index() -> dict[str, Any]:
     return {
         "service": "overwatch-rush-api",
         "version": APP_VERSION,

@@ -3,6 +3,21 @@ from __future__ import annotations
 from fastapi.testclient import TestClient
 
 
+def test_root_landing_page(client: TestClient) -> None:
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/html")
+    assert "Overwatch Rush API" in response.text
+    assert 'href="/docs"' in response.text
+    assert "keine Spieldateien" in response.text
+
+
+def test_v1_json_index(client: TestClient) -> None:
+    body = client.get("/v1").json()
+    assert body["service"] == "overwatch-rush-api"
+    assert "/v1/heroes" in body["endpoints"]
+
+
 def test_health(client: TestClient) -> None:
     response = client.get("/health")
     assert response.status_code == 200
