@@ -11,7 +11,10 @@ Regeln für Agenten, die in diesem Repo arbeiten. Gültig ab 2026-10-17.
    manuelles Werkzeug für autorisierte lokale Nutzung.
 3. **Keine erfundenen Daten.** Jeder neue Datensatz braucht `sources`
    (https), `verified_at` und `confidence`. Unbelegte Felder bleiben leer.
-4. **Markenrechte respektieren.** Kein Branding, das eine offizielle
+4. **Keine Live-Spielerdaten.** Kein Scraping von Blizzard-Endpunkten, keine
+   Reverse-Engineering-APIs, kein TLS-MITM, keine fremden Accounts. Begründung
+   und Alternativen: `SPEC.md` Abschnitt 2a.
+5. **Markenrechte respektieren.** Kein Branding, das eine offizielle
    Blizzard-Verbindung suggeriert.
 
 ## Arbeitsweise

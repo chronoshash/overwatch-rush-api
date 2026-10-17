@@ -162,6 +162,23 @@ Datenänderungen erfolgen in `data/*.json`; `pytest` erzwingt danach gültige
 Quellen und Referenzen. Siehe [SPEC.md](SPEC.md) für Ziele und Ausschlüsse,
 [TESTING.md](TESTING.md) für Nachweise und [AGENTS.md](AGENTS.md) für Regeln.
 
+## Warum keine Live-Spielerdaten?
+
+Häufige Frage, klare Antwort: **geht nicht** – nicht „noch nicht".
+
+- **Keine offizielle API.** Blizzard bietet kein Overwatch-API; das
+  Battle.net-Developer-Portal deckt Konten ab, nicht Match-Stats.
+- **Keine Seite zum Scrapen.** Community-APIs wie `overfast-api` lesen
+  öffentliche Overwatch-2-Karriereseiten. Rush hat keine – Mobile-only,
+  Soft Launch, kein Web-Profil.
+- **Stats sind serverseitig.** Sie stecken nicht in der App. Zugriff hieße:
+  eigene Credentials + private Endpunkte oder TLS-MITM → EULA-Verstoß.
+
+Der Client enthält nur statische Spieldaten (Helden, Talente, Mods, Balance).
+Wer echte eigene Matchdaten will, kann sie lokal erfassen und die API um einen
+**selbst gemeldeten** Match-Log erweitern (siehe SPEC, Abschnitt 2a) – das ist
+legal, weil es die eigenen Daten sind.
+
 ## Bekannte Einschränkungen
 
 - Keine Ability-/Stat-Daten: für Rush-Kits existiert keine belastbare

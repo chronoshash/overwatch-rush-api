@@ -20,6 +20,35 @@ Modi, Maps, Regions-/Plattformstatus.
 - Keine Auth, keine Schreib-API, keine Datenbank in v0.1 (Datei-Dataset).
 - Keine Aussage über zukünftige Releases/Regionen über das hinaus, was Blizzard
   oder das Store-Listing belegt.
+- **Keine Live-Spielerdaten (Stats, Match-History, Leaderboards).** Siehe
+  Abschnitt 2a – das ist keine Designentscheidung, sondern eine harte Grenze.
+
+## 2a. Warum es keine Live-Spielerdaten gibt
+
+Drei voneinander unabhängige Blocker. Jeder einzelne reicht schon.
+
+1. **Es existiert keine API.** Blizzard betreibt kein offizielles
+   Overwatch-API; `develop.battle.net` deckt Battle.net-Konten ab, nicht
+   Match-Statistiken. Ein Entwickler-Thread (Okt. 2026) fasst es zusammen:
+   „there is no api for overwatch and there probably wont be one“. Auch für
+   Overwatch Rush ist nichts angekündigt.
+2. **Es gibt keine öffentliche Seite zum Auslesen.** Bekannte Community-APIs
+   (`overfast-api`, `ow-api`, `owapi.eu`, `oversmash`) funktionieren, weil sie
+   *öffentliche Overwatch-2-Karriereseiten scrapen*. Rush ist Mobile-only im
+   Soft Launch – es gibt kein Karriereprofil im Web, also nichts zu scrapen.
+3. **Stats liegen serverseitig hinter Login.** Sie sind nicht im Client
+   enthalten. Sie zu bekommen hieße: eigene Zugangsdaten + reverse-engineerte
+   private Endpunkte oder TLS-MITM. Das ist ein Verstoß gegen die Blizzard-EULA
+   (unautorisierter Zugriff) – unabhängig davon, dass `com.blizzard.overwatch.rush`
+   nur in ID/MY/PH überhaupt spielbar ist.
+
+**Was im Client steckt:** Heldendefinitionen, Talente, Mods, UI-Strings,
+Balance-Werte. Das ist die statische Ebene – keine fremden Spielerdaten.
+Diese Werte lokal auszulesen (`scripts/ingest_local.py`) ist etwas anderes als
+sie weiterzuverbreiten; Assets bleiben tabu, Zahlen nur als belegte Fakten.
+
+**Was daraus folgt:** Dieses Projekt bleibt bei Stammdaten. Alles andere wäre
+entweder erfunden, illegal oder beides.
 
 ## 3. Datenquellen (Primärquellen zuerst)
 
