@@ -3,142 +3,718 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Overwatch Rush — Datenset</title>
+<meta name="color-scheme" content="dark light">
+<meta name="description" content="Overwatch Rush – Helden, Subklassen, Modi und Maps als quellenbasiertes Datenset. Standalone, ohne Server.">
+<title>Overwatch Rush — Explorer</title>
 <style>
-  :root { color-scheme: dark; --line:#22314a; --muted:#8fa1b8; --accent:#8fd3ff; }
-  * { box-sizing: border-box; }
-  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-         background: radial-gradient(1200px 600px at 20% -10%, #1f3a5f 0%, #0b1220 55%, #070b12 100%);
-         color:#e6edf7; min-height:100vh; }
-  .wrap { width:min(1100px,100%); margin:0 auto; padding:32px 20px 64px; }
-  .badge { display:inline-block; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
-           color:var(--accent); border:1px solid #2b4a6b; border-radius:999px; padding:4px 12px; }
-  h1 { font-size:clamp(26px,4.5vw,40px); margin:14px 0 6px; }
-  .lead { color:var(--muted); max-width:70ch; line-height:1.6; margin:0 0 22px; }
-  .stats { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:24px; }
-  .stat { background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:12px;
-          padding:10px 16px; min-width:110px; }
-  .stat b { display:block; font-size:20px; }
-  .stat span { font-size:12px; color:var(--muted); }
-  .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:18px; }
-  input[type=search] { flex:1 1 240px; min-width:200px; padding:11px 14px; border-radius:11px;
-      border:1px solid var(--line); background:rgba(255,255,255,.05); color:inherit; font-size:14px; }
-  input[type=search]:focus { outline:2px solid #3d6ea0; outline-offset:1px; }
-  .chip { cursor:pointer; border:1px solid var(--line); background:rgba(255,255,255,.04);
-          color:var(--muted); border-radius:999px; padding:7px 14px; font-size:13px; }
-  .chip[aria-pressed=true] { border-color:#3d6ea0; color:#e6edf7; background:rgba(61,110,160,.25); }
-  .tabs { display:flex; gap:6px; margin:26px 0 16px; border-bottom:1px solid var(--line); }
-  .tab { background:none; border:none; color:var(--muted); padding:10px 16px; cursor:pointer;
-         font-size:14px; border-bottom:2px solid transparent; }
-  .tab[aria-selected=true] { color:#e6edf7; border-bottom-color:var(--accent); }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; }
-  .card { background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:14px; padding:16px 18px; }
-  .card h3 { margin:0 0 4px; font-size:16px; }
-  .card .sub { font-size:12px; color:var(--accent); text-transform:uppercase; letter-spacing:.08em; }
-  .card p { margin:10px 0 0; font-size:13px; color:var(--muted); line-height:1.55; }
-  .tag { display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:6px;
-         padding:2px 7px; margin:8px 6px 0 0; color:var(--muted); }
-  .tag.upcoming { border-color:#7a5a1f; color:#e3c07b; }
-  .tag.live { border-color:#24523a; color:#83d9a8; }
-  .empty { color:var(--muted); padding:40px 0; text-align:center; }
-  footer { margin-top:40px; font-size:12px; color:#6f819a; line-height:1.7; border-top:1px solid var(--line); padding-top:18px; }
-  a { color:var(--accent); }
-  code { background:rgba(255,255,255,.06); padding:1px 6px; border-radius:6px; }
+  :root {
+    color-scheme: dark;
+    --bg-0:#070b12; --bg-1:#0b1220; --bg-2:#101a2b;
+    --line:#22314a; --line-soft:#1a2740;
+    --text:#e6edf7; --muted:#8fa1b8; --dim:#6f819a;
+    --accent:#8fd3ff; --accent-2:#3d6ea0;
+    --live:#83d9a8; --live-bg:#0f2a1e; --live-line:#24523a;
+    --soon:#e3c07b; --soon-bg:#2a2110; --soon-line:#7a5a1f;
+    --radius:14px;
+    --shadow:0 18px 50px rgba(0,0,0,.45);
+  }
+  * { box-sizing:border-box; }
+  html, body { height:100%; }
+  body {
+    margin:0; color:var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background:
+      radial-gradient(1100px 520px at 15% -12%, #1d3a5e 0%, transparent 60%),
+      radial-gradient(900px 500px at 95% 0%, #172a44 0%, transparent 55%),
+      linear-gradient(180deg, var(--bg-1), var(--bg-0));
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color:var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .wrap { width:min(1180px,100%); margin:0 auto; padding:28px 20px 72px; }
+
+  /* ---------- header ---------- */
+  header.top { display:flex; flex-wrap:wrap; gap:18px; align-items:flex-end; justify-content:space-between; }
+  .badge {
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent); border:1px solid #2b4a6b; border-radius:999px; padding:5px 12px;
+    background:rgba(143,211,255,.06);
+  }
+  .badge .dot { width:6px; height:6px; border-radius:50%; background:var(--live); box-shadow:0 0 8px var(--live); }
+  h1 { font-size:clamp(28px,4.6vw,42px); line-height:1.1; margin:14px 0 6px; letter-spacing:-.02em; }
+  .lead { color:var(--muted); max-width:66ch; line-height:1.6; margin:0; font-size:15px; }
+  .lead strong { color:var(--text); font-weight:600; }
+
+  .stats { display:flex; flex-wrap:wrap; gap:10px; }
+  .stat {
+    background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:12px;
+    padding:10px 16px; min-width:104px;
+  }
+  .stat b { display:block; font-size:21px; line-height:1.2; }
+  .stat span { font-size:11.5px; color:var(--muted); }
+
+  /* ---------- toolbar ---------- */
+  .toolbar {
+    position:sticky; top:0; z-index:20; margin:26px 0 14px; padding:12px;
+    background:rgba(9,15,25,.82); backdrop-filter:blur(12px);
+    border:1px solid var(--line-soft); border-radius:16px;
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+  }
+  .search { position:relative; flex:1 1 260px; min-width:200px; }
+  .search svg { position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.55; }
+  input[type=search] {
+    width:100%; padding:11px 12px 11px 38px; font-size:14px; font-family:inherit;
+    color:var(--text); background:rgba(255,255,255,.05);
+    border:1px solid var(--line); border-radius:11px;
+  }
+  input[type=search]::placeholder { color:var(--dim); }
+  input[type=search]:focus-visible { outline:2px solid var(--accent-2); outline-offset:1px; }
+  kbd {
+    font:inherit; font-size:11px; color:var(--muted);
+    border:1px solid var(--line); border-bottom-width:2px; border-radius:6px;
+    padding:1px 6px; background:rgba(255,255,255,.05);
+  }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .chip {
+    font:inherit; font-size:12.5px; cursor:pointer; color:var(--muted);
+    border:1px solid var(--line); background:rgba(255,255,255,.03);
+    border-radius:999px; padding:6px 12px; transition:border-color .15s, color .15s, background .15s;
+  }
+  .chip:hover { color:var(--text); border-color:#31517a; }
+  .chip[aria-pressed=true] { color:#08111d; background:var(--accent); border-color:var(--accent); font-weight:600; }
+  .chip:focus-visible, .tab:focus-visible, .card:focus-visible, .icon-btn:focus-visible {
+    outline:2px solid var(--accent); outline-offset:2px;
+  }
+  .spacer { flex:1; }
+  .icon-btn {
+    font:inherit; font-size:13px; color:var(--muted); cursor:pointer;
+    background:rgba(255,255,255,.03); border:1px solid var(--line);
+    border-radius:10px; padding:8px 12px;
+  }
+  .icon-btn:hover { color:var(--text); border-color:#31517a; }
+  .icon-btn[aria-pressed=true] { color:var(--accent); border-color:var(--accent-2); }
+
+  /* ---------- tabs ---------- */
+  .tabs { display:flex; gap:2px; margin:22px 0 18px; border-bottom:1px solid var(--line); overflow-x:auto; }
+  .tab {
+    font:inherit; font-size:14px; color:var(--muted); background:none; border:none;
+    padding:11px 16px; cursor:pointer; white-space:nowrap;
+    border-bottom:2px solid transparent; margin-bottom:-1px;
+  }
+  .tab:hover { color:var(--text); }
+  .tab[aria-selected=true] { color:var(--text); border-bottom-color:var(--accent); font-weight:600; }
+  .tab .count { color:var(--dim); font-size:12px; margin-left:6px; }
+
+  /* ---------- cards ---------- */
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(258px,1fr)); gap:12px; }
+  .card {
+    position:relative; text-align:left; font:inherit; color:inherit; cursor:pointer;
+    background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
+    border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px;
+    transition:transform .15s, border-color .15s, box-shadow .15s;
+  }
+  .card:hover { transform:translateY(-2px); border-color:#3a5f8f; box-shadow:0 10px 26px rgba(0,0,0,.32); }
+  .card .kicker { font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--accent); }
+  .card h3 { margin:5px 0 0; font-size:17px; line-height:1.25; }
+  .card .body { margin:9px 0 0; font-size:13px; color:var(--muted); line-height:1.55; }
+  .meta-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+  .tag {
+    font-size:11px; border:1px solid var(--line-soft); border-radius:6px;
+    padding:2px 7px; color:var(--muted); background:rgba(255,255,255,.02);
+  }
+  .tag.live { color:var(--live); border-color:var(--live-line); background:var(--live-bg); }
+  .tag.upcoming { color:var(--soon); border-color:var(--soon-line); background:var(--soon-bg); }
+  .card .chev { position:absolute; right:14px; bottom:12px; color:var(--dim); font-size:16px; }
+
+  /* ---------- table ---------- */
+  .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); }
+  table { width:100%; border-collapse:collapse; font-size:13.5px; }
+  th, td { text-align:left; padding:11px 14px; border-bottom:1px solid var(--line-soft); white-space:nowrap; }
+  th { position:sticky; top:0; background:#0d1626; color:var(--muted); font-weight:600; font-size:12px;
+       letter-spacing:.06em; text-transform:uppercase; cursor:pointer; user-select:none; }
+  th:hover { color:var(--text); }
+  th .arrow { opacity:.45; margin-left:5px; font-size:10px; }
+  tbody tr:hover { background:rgba(255,255,255,.03); }
+  tbody tr:last-child td { border-bottom:none; }
+
+  /* ---------- drawer ---------- */
+  .scrim {
+    position:fixed; inset:0; background:rgba(3,7,12,.66); backdrop-filter:blur(3px);
+    opacity:0; pointer-events:none; transition:opacity .2s; z-index:40;
+  }
+  .scrim.open { opacity:1; pointer-events:auto; }
+  .drawer {
+    position:fixed; top:0; right:0; height:100%; width:min(520px,100%);
+    background:linear-gradient(180deg,#0d1727,#080e17);
+    border-left:1px solid var(--line); box-shadow:var(--shadow);
+    transform:translateX(102%); transition:transform .24s cubic-bezier(.22,.9,.3,1);
+    z-index:50; display:flex; flex-direction:column;
+  }
+  .drawer.open { transform:none; }
+  .drawer header { padding:20px 22px 14px; border-bottom:1px solid var(--line-soft); }
+  .drawer .close {
+    position:absolute; top:14px; right:14px; width:34px; height:34px; border-radius:9px;
+    display:grid; place-items:center; cursor:pointer; font-size:18px; line-height:1;
+    color:var(--muted); background:rgba(255,255,255,.05); border:1px solid var(--line);
+  }
+  .drawer .close:hover { color:var(--text); }
+  .drawer .content { padding:18px 22px 32px; overflow-y:auto; }
+  .drawer h2 { margin:6px 0 2px; font-size:24px; }
+  .drawer .sub { color:var(--accent); font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+  .section { margin-top:22px; }
+  .section h4 {
+    margin:0 0 8px; font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim);
+  }
+  .section p { margin:0; font-size:13.5px; line-height:1.65; color:var(--muted); }
+  .kv { display:grid; grid-template-columns:130px 1fr; gap:7px 12px; font-size:13.5px; }
+  .kv dt { color:var(--dim); }
+  .kv dd { margin:0; color:var(--text); }
+  ul.plain { margin:0; padding-left:18px; color:var(--muted); font-size:13.5px; line-height:1.7; }
+  .src-list { list-style:none; margin:0; padding:0; display:grid; gap:7px; }
+  .src-list li { font-size:12.5px; overflow-wrap:anywhere; }
+  .src-list a { color:#9cc9ee; }
+
+  /* ---------- misc ---------- */
+  .empty { text-align:center; color:var(--muted); padding:64px 12px; }
+  .empty b { display:block; color:var(--text); margin-bottom:6px; font-size:15px; }
+  footer.foot {
+    margin-top:38px; padding-top:18px; border-top:1px solid var(--line-soft);
+    font-size:12px; color:var(--dim); line-height:1.75;
+  }
+  .sr-only {
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+  }
+  .toast {
+    position:fixed; left:50%; bottom:24px; transform:translate(-50%, 20px);
+    background:#13233a; border:1px solid var(--line); color:var(--text);
+    padding:10px 16px; border-radius:10px; font-size:13px; opacity:0;
+    transition:opacity .2s, transform .2s; pointer-events:none; z-index:60;
+  }
+  .toast.show { opacity:1; transform:translate(-50%, 0); }
+  pre.json {
+    margin:0; padding:16px; overflow:auto; max-height:60vh; font-size:12px; line-height:1.55;
+    background:#0a1320; border:1px solid var(--line); border-radius:var(--radius);
+    color:#b7c9de;
+  }
+  @media (max-width:640px) {
+    .wrap { padding:20px 14px 56px; }
+    .stats { width:100%; }
+    .stat { flex:1 1 88px; min-width:88px; padding:9px 12px; }
+    .kv { grid-template-columns:1fr; gap:2px 0; }
+    .kv dd { margin-bottom:8px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition:none !important; animation:none !important; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <span class="badge">data 2026.10.17 · 2026-10-17</span>
-  <h1>Overwatch Rush — Datenset</h1>
-  <p class="lead">Top-down hero shooter von Blizzard Entertainment. Soft Launch seit 2026-08-31 in ID, MY, PH. Diese Seite ist statisch: kein Server, keine externen Assets, alle Daten eingebettet.</p>
+  <header class="top">
+    <div>
+      <span class="badge"><span class="dot"></span> data 2026.10.17 · geprüft 2026-10-17</span>
+      <h1>Overwatch Rush</h1>
+      <p class="lead">Top-down hero shooter von Blizzard Entertainment, top-down-Perspektive, free-to-play. Soft Launch seit 2026-08-31 in ID, MY, PH. <strong>Alle Angaben mit Quelle</strong> – Felder ohne Belege bleiben leer.</p>
+    </div>
+    <div class="stats" id="stats"><div class="stat"><b>9</b><span>spielbar</span></div><div class="stat"><b>3</b><span>angekündigt</span></div><div class="stat"><b>4</b><span>Spielmodi</span></div><div class="stat"><b>3</b><span>Maps</span></div><div class="stat"><b>5</b><span>Subklassen</span></div></div>
+  </header>
 
-  <div class="stats"><div class="stat"><b>9</b><span>Helden spielbar</span></div><div class="stat"><b>3</b><span>angekündigt</span></div><div class="stat"><b>4</b><span>Spielmodi</span></div><div class="stat"><b>3</b><span>Maps</span></div><div class="stat"><b>5</b><span>Subklassen</span></div></div>
-
-  <div class="controls">
-    <input type="search" id="q" placeholder="Suchen: Held, Modus, Map …" aria-label="Suche">
-    <button class="chip" data-filter="all" aria-pressed="true">Alle</button><button class="chip" data-filter="assassin" aria-pressed="false">Assassin</button><button class="chip" data-filter="fighter" aria-pressed="false">Fighter</button><button class="chip" data-filter="long_ranger" aria-pressed="false">Long Ranger</button><button class="chip" data-filter="utility" aria-pressed="false">Utility</button><button class="chip" data-filter="vanguard" aria-pressed="false">Vanguard</button>
+  <div class="toolbar" role="search">
+    <label class="search">
+      <span class="sr-only">Suche</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
+      </svg>
+      <input id="q" type="search" placeholder="Held, Modus, Map, Rolle …  ( / )" autocomplete="off" spellcheck="false">
+    </label>
+    <div class="chips" id="role-chips" aria-label="Nach Subklasse filtern"><button class="chip" data-role="all" aria-pressed="true">Alle Rollen</button><button class="chip" data-role="assassin" aria-pressed="false">Assassin</button><button class="chip" data-role="fighter" aria-pressed="false">Fighter</button><button class="chip" data-role="long_ranger" aria-pressed="false">Long Ranger</button><button class="chip" data-role="utility" aria-pressed="false">Utility</button><button class="chip" data-role="vanguard" aria-pressed="false">Vanguard</button></div>
+    <div class="chips" aria-label="Nach Status filtern">
+      <button class="chip" data-status="all" aria-pressed="true">Alle</button>
+      <button class="chip" data-status="live" aria-pressed="false">Spielbar</button>
+      <button class="chip" data-status="upcoming" aria-pressed="false">Angekündigt</button>
+    </div>
+    <span class="spacer"></span>
+    <button class="icon-btn" id="view-toggle" aria-pressed="false" title="Zwischen Karten und Tabelle wechseln">Tabelle</button>
+    <button class="icon-btn" id="copy-link" title="Link zur aktuellen Ansicht kopieren">Link kopieren</button>
   </div>
 
-  <div class="tabs" role="tablist"><button class="tab" role="tab" data-tab="heroes" aria-selected="true">Helden</button><button class="tab" role="tab" data-tab="modes" aria-selected="false">Modi</button><button class="tab" role="tab" data-tab="maps" aria-selected="false">Maps</button></div>
-  <div id="grid" class="grid"></div>
-  <div id="empty" class="empty" hidden>Keine Treffer.</div>
+  <div class="tabs" role="tablist" aria-label="Bereiche"><button class="tab" role="tab" data-tab="heroes" aria-selected="true">Helden<span class="count">12</span></button><button class="tab" role="tab" data-tab="modes" aria-selected="false">Modi<span class="count">4</span></button><button class="tab" role="tab" data-tab="maps" aria-selected="false">Maps<span class="count">3</span></button><button class="tab" role="tab" data-tab="roles" aria-selected="false">Subklassen<span class="count">5</span></button><button class="tab" role="tab" data-tab="data" aria-selected="false">Daten<span class="count">JSON</span></button></div>
 
-  <footer>
-    Quellen: Blizzard News, Google Play, App Store, Fachpresse (siehe <code>sources</code> je Eintrag).
-    Overwatch ist eine Marke von Blizzard Entertainment. Dieses Projekt verteilt keine Spieldateien.
-    API-Version: <code>GET /v1/heroes</code> · statisch generiert mit <code>scripts/build_static.py</code>.
+  <main id="view" aria-live="polite"></main>
+
+  <footer class="foot">
+    <div>Quellen je Eintrag unter „Quellen“ in der Detailansicht. Overwatch ist eine Marke von
+      Blizzard Entertainment; dieses Projekt steht in keiner Verbindung zu Blizzard und verteilt
+      keine Spieldateien.</div>
+    <div>Standalone-Build: eine HTML-Datei, kein Server, keine externen Requests.
+      Dieselben Daten liefert die API unter <code>/v1/heroes</code>, <code>/v1/maps</code>, <code>/v1/modes</code>.</div>
   </footer>
 </div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true">
+  <header>
+    <span class="sub" id="drawer-kicker"></span>
+    <h2 id="drawer-title"></h2>
+    <button class="close" id="drawer-close" aria-label="Schließen (Esc)">×</button>
+  </header>
+  <div class="content" id="drawer-body"></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
 const DATA = {"game":{"name":"Overwatch Rush","package_id":"com.blizzard.overwatch.rush","developer":"Blizzard Entertainment","publisher":"Blizzard Entertainment","genre":"Top-down hero shooter","perspective":"top-down","price_model":"free-to-play","platforms":["android","ios"],"release_stage":"soft_launch","soft_launch":{"started":"2026-08-31","regions":["ID","MY","PH"],"platforms":["android","ios"]},"match_formats":["solo-free-for-all","duo-free-for-all","3v3-control","4v4-pvp"],"controller_support":false,"party_support":false,"party_support_note":"Play-Store-Listing nennt Party-Play mit Freunden als 'coming soon'.","approximate_download_gb":1.4,"min_requirements":{"android_ram_gb":3,"android_min_device":"Samsung Galaxy A14 5G","android_chipsets":["Snapdragon 480","Snapdragon 675","Snapdragon 720G","Snapdragon 730","Snapdragon 765","MediaTek Dimensity 6XXX","MediaTek Dimensity 7XXX","MediaTek Dimensity 8XXX","MediaTek Helio G9X","Exynos 980","Exynos 1380"],"ios_min_device":"iPhone SE (2. Generation)","ios_min_chip":"A12 Bionic"},"progression":"Hero Levels (heldengebundene Progression, Loadout-Anpassung)","global_release_date":null,"global_release_note":"Blizzard hat keinen globalen Release-Termin angekündigt.","data_version":"2026.10.17","updated_at":"2026-10-17","disclaimer":"Community-Datenset ohne offizielle API von Blizzard. Overwatch ist eine Marke von Blizzard Entertainment. Dieses Projekt verteilt keine Spieldateien.","sources":["https://news.blizzard.com/en-us/article/24244645/development-update-overwatch-rush","https://play.google.com/store/apps/details?id=com.blizzard.overwatch.rush","https://apps.apple.com/id/app/overwatch-rush/id6758123632","https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/","https://www.esportsinsider.com/how-to-play-overwatch-rush"]},"heroes":[{"slug":"brigitte","name":"Brigitte","aliases":[],"subclass":"vanguard","overwatch_class":"support","status":"live","first_playable":"2026-08-31","abilities":[{"slug":"shield-bash","name":"Shield Bash","kind":"ability"},{"slug":"whip-shot","name":"Whip Shot","kind":"ability"}],"notes":"Neunte Heldin; für Rush zum Vanguard umgebaut, kombiniert Frontline-Zähigkeit mit Nahkampf-Druck.","sources":["https://play.google.com/store/apps/details?id=com.blizzard.overwatch.rush","https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month","https://esportsinsider.com/overwatch-rush-heroes"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"kiriko","name":"Kiriko","aliases":[],"subclass":"utility","overwatch_class":"support","status":"live","first_playable":null,"abilities":[],"notes":"Teil des Launch-Rosters der Soft-Launch-Phase.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"lucio","name":"Lúcio","aliases":["lucio"],"subclass":"utility","overwatch_class":"support","status":"live","first_playable":null,"abilities":[],"notes":"Wurde im Rahmen des Soft-Launch-Updates überarbeitet.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"mercy","name":"Mercy","aliases":[],"subclass":"utility","overwatch_class":"support","status":"live","first_playable":null,"abilities":[],"notes":"Nutzt in Rush primär ihren Blaster statt des Caduceus-Stabs.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://gameinformer.com/preview/2026/02/24/blizzards-first-person-hero-shooter-goes-top-down"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"pharah","name":"Pharah","aliases":[],"subclass":"long_ranger","overwatch_class":"damage","status":"live","first_playable":null,"abilities":[],"notes":"Teil des Launch-Rosters der Soft-Launch-Phase.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"reaper","name":"Reaper","aliases":[],"subclass":"assassin","overwatch_class":"damage","status":"live","first_playable":null,"abilities":[],"notes":"Teil des Launch-Rosters der Soft-Launch-Phase.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"reinhardt","name":"Reinhardt","aliases":[],"subclass":"vanguard","overwatch_class":"tank","status":"live","first_playable":null,"abilities":[],"notes":"Schildmechanik für Touch angepasst (Wischen zum Reflektieren eingehender Projektile).","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://vpesports.com/games/overwatch/overwatch-rush-heroes"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"soldier-76","name":"Soldier: 76","aliases":["soldier 76","soldier76","s76"],"subclass":"fighter","overwatch_class":"damage","status":"live","first_playable":null,"abilities":[],"notes":"Epic-Skin 'Kingpin' ist Teil des Tutorial-Bundles.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"tracer","name":"Tracer","aliases":[],"subclass":"assassin","overwatch_class":"damage","status":"live","first_playable":null,"abilities":[],"notes":"Teil des Launch-Rosters der Soft-Launch-Phase.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"doomfist","name":"Doomfist","aliases":[],"subclass":"fighter","overwatch_class":"tank","status":"upcoming","first_playable":null,"abilities":[],"notes":"Von Blizzard angekündigt, zum Stichtag noch nicht spielbar. Subklasse laut Sekundärbericht.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://overwatch.fandom.com/wiki/Overwatch_Rush"],"verified_at":"2026-10-17","confidence":"medium"},{"slug":"genji","name":"Genji","aliases":[],"subclass":"assassin","overwatch_class":"damage","status":"upcoming","first_playable":null,"abilities":[],"notes":"Von Blizzard angekündigt, zum Stichtag noch nicht spielbar. Subklasse laut Sekundärbericht.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://overwatch.fandom.com/wiki/Overwatch_Rush"],"verified_at":"2026-10-17","confidence":"medium"},{"slug":"hanzo","name":"Hanzo","aliases":[],"subclass":"long_ranger","overwatch_class":"damage","status":"upcoming","first_playable":null,"abilities":[],"notes":"Von Blizzard angekündigt, zum Stichtag noch nicht spielbar. Subklasse laut Sekundärbericht.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://overwatch.fandom.com/wiki/Overwatch_Rush"],"verified_at":"2026-10-17","confidence":"medium"}],"roles":[{"slug":"assassin","name":"Assassin","description":"Auf Flanken und schnelle Einzelkills ausgelegt.","playstyle":"Flankieren, überraschend zuschlagen, hoher Burst-Schaden.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://vpesports.com/games/overwatch/overwatch-rush-heroes"],"verified_at":"2026-10-17"},{"slug":"fighter","name":"Fighter","description":"Frontaler Nah- bis Mittelkampf mit hoher Standfestigkeit.","playstyle":"Vorpushen, Druck aufbauen, Gefechte binden.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://vpesports.com/games/overwatch/overwatch-rush-heroes"],"verified_at":"2026-10-17"},{"slug":"long_ranger","name":"Long Ranger","description":"Fernkampf und Kontrolle von Sichtlinien.","playstyle":"Distanz halten, Lanes kontrollieren, Ziele unter Druck setzen.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://vpesports.com/games/overwatch/overwatch-rush-heroes"],"verified_at":"2026-10-17"},{"slug":"utility","name":"Utility","description":"Unterstützung, Heilung und Kontrollwerkzeuge für das Team.","playstyle":"Team versorgen, Flanken unterstützen, Kämpfe drehen.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://vpesports.com/games/overwatch/overwatch-rush-heroes"],"verified_at":"2026-10-17"},{"slug":"vanguard","name":"Vanguard","description":"Frontline mit hoher Zähigkeit; entspricht am ehesten der Tank-Rolle im Hauptspiel.","playstyle":"Raum schaffen, Schaden abfangen, Team nach vorn bringen.","sources":["https://esportsinsider.com/overwatch-rush-heroes","https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"],"verified_at":"2026-10-17"}],"modes":[{"slug":"4v4-pvp","name":"4v4 PvP","team_size":4,"teams":2,"objective":"Kern-Teammodus der Soft-Launch-Version.","description":"Zwei Teams mit je vier Heldinnen und Helden treten in kurzen Top-Down-Gefechten an.","sources":["https://news.blizzard.com/en-us/article/24244645/development-update-overwatch-rush","https://www.gosugamers.net/entertainment/news/79054-overwatch-rush-blizzard-s-mobile-top-down-hero-shooter-soft-launches-in-southeast-asia-this-month"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"3v3-control","name":"3v3 Control","team_size":3,"teams":2,"objective":"Objektive erobern und halten, angepasst auf kleinere Teams.","description":"Eine Adaption des Control-Formats aus Overwatch für drei Spieler pro Seite.","sources":["https://redreactions.com/articles/overwatch-rush-explained/","https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"duo-free-for-all","name":"Duo Free for All","team_size":2,"teams":3,"objective":"Drei Zweier-Teams gegeneinander, jeder gegen jeden.","description":"Free-for-All-Variante, in der drei Duos gleichzeitig in derselben Arena kämpfen.","sources":["https://redreactions.com/articles/overwatch-rush-explained/","https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"solo-free-for-all","name":"Solo Free for All","team_size":1,"teams":null,"objective":"Jeder gegen jeden ohne Team.","description":"Solo-PvP-Variante; laut Blizzard-Wortlaut kein Einzelspieler-Storymodus.","sources":["https://redreactions.com/articles/overwatch-rush-explained/","https://play.google.com/store/apps/details?id=com.blizzard.overwatch.rush"],"verified_at":"2026-10-17","confidence":"medium"}],"maps":[{"slug":"narwhal-cove","name":"Narwhal Cove","inspired_by":"Watchpoint: Gibraltar","built_from_scratch":true,"setting":"Küsten-/Militäranlage","sources":["https://redreactions.com/articles/overwatch-rush-explained/","https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"hydronet-gardens","name":"Hydronet Gardens","inspired_by":"Kairo","built_from_scratch":true,"setting":"Garten-/Wasseranlage","sources":["https://redreactions.com/articles/overwatch-rush-explained/","https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"],"verified_at":"2026-10-17","confidence":"high"},{"slug":"mansion-portero","name":"Mansión Portero","inspired_by":"Dorado","built_from_scratch":true,"setting":"Anwesen in Dorado-Optik","sources":["https://redreactions.com/articles/overwatch-rush-explained/","https://esports.gg/news/overwatch/overwatch-rush-to-release-in-malaysia-indonesia-and-the-philippines/"],"verified_at":"2026-10-17","confidence":"high"}]};
-const state = { tab: "heroes", filter: "all", q: "" };
 
-const roleName = Object.fromEntries(DATA.roles.map(r => [r.slug, r.name]));
+const ROLE = Object.fromEntries(DATA.roles.map(r => [r.slug, r]));
+const HERO = Object.fromEntries(DATA.heroes.map(h => [h.slug, h]));
+const MODE = Object.fromEntries(DATA.modes.map(m => [m.slug, m]));
+const MAP  = Object.fromEntries(DATA.maps.map(m => [m.slug, m]));
 
-function heroCard(h) {
-  const abilities = h.abilities.length
-    ? `<p><strong>Belegt:</strong> ${h.abilities.map(a => a.name).join(", ")}</p>` : "";
-  return `<article class="card">
-    <span class="sub">${roleName[h.subclass] || h.subclass}</span>
-    <h3>${h.name}</h3>
-    <p>${h.notes || ""}</p>${abilities}
-    <span class="tag ${h.status}">${h.status === "live" ? "spielbar" : "angekündigt"}</span>
-    <span class="tag">${h.overwatch_class}</span>
+const state = { tab: "heroes", q: "", role: "all", status: "all", view: "cards", sort: "name", dir: 1 };
+
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+const esc = (value) => String(value ?? "").replace(/[&<>"']/g, c => (
+  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+));
+const pct = (value) => (value === null || value === undefined) ? "—" : Math.round(value * 100) + " %";
+
+/* ---------------- filtering ---------------- */
+function heroList() {
+  const q = state.q;
+  let rows = DATA.heroes.filter(hero => {
+    if (state.role !== "all" && hero.subclass !== state.role) return false;
+    if (state.status !== "all" && hero.status !== state.status) return false;
+    if (!q) return true;
+    const haystack = [hero.name, hero.slug, hero.notes, ROLE[hero.subclass]?.name,
+      ...(hero.aliases || []), ...hero.abilities.map(a => a.name)].join(" ").toLowerCase();
+    return haystack.includes(q);
+  });
+  if (state.tab === "heroes") rows = sortHeroes(rows);
+  return rows;
+}
+
+function sortHeroes(rows) {
+  const value = (hero) => {
+    switch (state.sort) {
+      case "role": return ROLE[hero.subclass]?.name || hero.subclass;
+      case "status": return hero.status === "live" ? "0" : "1";
+      case "abilities": return String(hero.abilities.length).padStart(3, "0");
+      default: return hero.name;
+    }
+  };
+  return rows.slice().sort((a, b) => {
+    const av = value(a), bv = value(b);
+    const cmp = av.localeCompare(bv, "de", { sensitivity: "base" });
+    return (cmp || a.name.localeCompare(b.name, "de")) * state.dir;
+  });
+}
+
+function modeList() {
+  return DATA.modes.filter(mode => {
+    if (!state.q) return true;
+    return [mode.name, mode.slug, mode.description, mode.objective].join(" ").toLowerCase().includes(state.q);
+  }).sort((a, b) => a.name.localeCompare(b.name, "de"));
+}
+
+function mapList() {
+  return DATA.maps.filter(item => {
+    if (!state.q) return true;
+    return [item.name, item.slug, item.inspired_by || "", item.setting || ""].join(" ").toLowerCase().includes(state.q);
+  }).sort((a, b) => a.name.localeCompare(b.name, "de"));
+}
+
+function roleList() {
+  return DATA.roles.filter(role => {
+    if (!state.q) return true;
+    return [role.name, role.slug, role.description, role.playstyle].join(" ").toLowerCase().includes(state.q);
+  }).sort((a, b) => a.name.localeCompare(b.name, "de"));
+}
+
+/* ---------------- rendering ---------------- */
+function heroCard(hero) {
+  const role = ROLE[hero.subclass];
+  return `<article class="card" tabindex="0" role="button" data-hero="${esc(hero.slug)}"
+      aria-label="${esc(hero.name)} — Details öffnen">
+    <div class="kicker">${esc(role ? role.name : hero.subclass)}</div>
+    <h3>${esc(hero.name)}</h3>
+    <p class="body">${esc(hero.notes || role?.description || "")}</p>
+    <div class="meta-row">
+      <span class="tag ${hero.status}">${hero.status === "live" ? "spielbar" : "angekündigt"}</span>
+      <span class="tag">${esc(hero.overwatch_class)}</span>
+      ${hero.abilities.length ? `<span class="tag">${hero.abilities.length} Fähigkeiten</span>` : ""}
+    </div>
+    <span class="chev" aria-hidden="true">›</span>
   </article>`;
 }
 
-function modeCard(m) {
-  return `<article class="card">
-    <span class="sub">${m.teams ? m.teams + " Teams" : "offen"}</span>
-    <h3>${m.name}</h3>
-    <p>${m.description}</p>
-    <span class="tag">${m.team_size} pro Team</span>
+function modeCard(mode) {
+  const teams = mode.teams ? mode.teams + " Teams" : "offene Lobby";
+  return `<article class="card" tabindex="0" role="button" data-mode="${esc(mode.slug)}"
+      aria-label="${esc(mode.name)} — Details öffnen">
+    <div class="kicker">${esc(teams)}</div>
+    <h3>${esc(mode.name)}</h3>
+    <p class="body">${esc(mode.description)}</p>
+    <div class="meta-row">
+      <span class="tag">${mode.team_size} pro Team</span>
+      <span class="tag">${esc(mode.objective)}</span>
+    </div>
+    <span class="chev" aria-hidden="true">›</span>
   </article>`;
 }
 
-function mapCard(m) {
-  return `<article class="card">
-    <span class="sub">Vorlage: ${m.inspired_by || "—"}</span>
-    <h3>${m.name}</h3>
-    <p>${m.setting || ""}</p>
-    <span class="tag">${m.built_from_scratch ? "neu gebaut" : "Port"}</span>
+function mapCard(item) {
+  return `<article class="card" tabindex="0" role="button" data-map="${esc(item.slug)}"
+      aria-label="${esc(item.name)} — Details öffnen">
+    <div class="kicker">Vorlage: ${esc(item.inspired_by || "—")}</div>
+    <h3>${esc(item.name)}</h3>
+    <p class="body">${esc(item.setting || "")}</p>
+    <div class="meta-row">
+      <span class="tag">${item.built_from_scratch ? "neu gebaut" : "Port"}</span>
+    </div>
+    <span class="chev" aria-hidden="true">›</span>
   </article>`;
 }
 
-function current() {
-  if (state.tab === "heroes") return DATA.heroes.filter(h =>
-    (state.filter === "all" || h.subclass === state.filter) &&
-    (!state.q || (h.name + " " + h.slug + " " + h.notes + " " + (h.aliases||[]).join(" ")).toLowerCase().includes(state.q)));
-  if (state.tab === "modes") return DATA.modes.filter(m =>
-    !state.q || (m.name + " " + m.description).toLowerCase().includes(state.q));
-  return DATA.maps.filter(m =>
-    !state.q || (m.name + " " + (m.inspired_by||"") + " " + (m.setting||"")).toLowerCase().includes(state.q));
+function roleCard(role) {
+  const count = DATA.heroes.filter(h => h.subclass === role.slug).length;
+  const upcoming = DATA.heroes.filter(h => h.subclass === role.slug && h.status === "upcoming").length;
+  return `<article class="card" tabindex="0" role="button" data-role="${esc(role.slug)}"
+      aria-label="${esc(role.name)} — Details öffnen">
+    <div class="kicker">${count} Held${count === 1 ? "" : "en"}${upcoming ? ` · ${upcoming} angekündigt` : ""}</div>
+    <h3>${esc(role.name)}</h3>
+    <p class="body">${esc(role.description)}</p>
+    <div class="meta-row"><span class="tag">${esc(role.playstyle)}</span></div>
+    <span class="chev" aria-hidden="true">›</span>
+  </article>`;
+}
+
+function heroTable(rows) {
+  const arrow = (key) => state.sort === key ? `<span class="arrow">${state.dir === 1 ? "▲" : "▼"}</span>` : "";
+  return `<div class="table-wrap"><table>
+    <thead><tr>
+      <th data-sort="name" scope="col">Held${arrow("name")}</th>
+      <th data-sort="role" scope="col">Subklasse${arrow("role")}</th>
+      <th scope="col">Klasse</th>
+      <th data-sort="status" scope="col">Status${arrow("status")}</th>
+      <th data-sort="abilities" scope="col">Fähigkeiten${arrow("abilities")}</th>
+    </tr></thead>
+    <tbody>${rows.map(hero => `<tr data-hero="${esc(hero.slug)}" tabindex="0">
+      <td><strong>${esc(hero.name)}</strong></td>
+      <td>${esc(ROLE[hero.subclass]?.name || hero.subclass)}</td>
+      <td>${esc(hero.overwatch_class)}</td>
+      <td><span class="tag ${hero.status}">${hero.status === "live" ? "spielbar" : "angekündigt"}</span></td>
+      <td>${hero.abilities.length ? esc(hero.abilities.map(a => a.name).join(", ")) : "—"}</td>
+    </tr>`).join("")}</tbody>
+  </table></div>`;
+}
+
+function jsonView() {
+  return `<pre class="json" id="json-pre">${esc(JSON.stringify(DATA, null, 2))}</pre>`;
 }
 
 function render() {
-  const items = current();
-  const card = state.tab === "heroes" ? heroCard : state.tab === "modes" ? modeCard : mapCard;
-  document.getElementById("grid").innerHTML = items.map(card).join("");
-  document.getElementById("empty").hidden = items.length > 0;
-  document.querySelectorAll(".chip[data-filter]").forEach(el =>
-    el.setAttribute("aria-pressed", String(el.dataset.filter === state.filter)));
+  const view = $("#view");
+  let rows;
+
+  if (state.tab === "heroes") {
+    rows = heroList();
+    view.innerHTML = rows.length
+      ? (state.view === "table" ? heroTable(rows) : `<div class="grid">${rows.map(heroCard).join("")}</div>`)
+      : emptyState();
+  } else if (state.tab === "modes") {
+    rows = modeList();
+    view.innerHTML = rows.length ? `<div class="grid">${rows.map(modeCard).join("")}</div>` : emptyState();
+  } else if (state.tab === "maps") {
+    rows = mapList();
+    view.innerHTML = rows.length ? `<div class="grid">${rows.map(mapCard).join("")}</div>` : emptyState();
+  } else if (state.tab === "roles") {
+    rows = roleList();
+    view.innerHTML = rows.length ? `<div class="grid">${rows.map(roleCard).join("")}</div>` : emptyState();
+  } else {
+    view.innerHTML = jsonView();
+  }
+
+  $("#view-toggle").hidden = state.tab !== "heroes";
+  $("#view-toggle").textContent = state.view === "table" ? "Karten" : "Tabelle";
+  $("#view-toggle").setAttribute("aria-pressed", String(state.view === "table"));
+  updateHash();
 }
 
-document.getElementById("q").addEventListener("input", e => {
-  state.q = e.target.value.trim().toLowerCase(); render();
+function emptyState() {
+  return `<div class="empty"><b>Keine Treffer</b>
+    Für „${esc(state.q || state.role)}“ gibt es in diesem Bereich nichts.
+    <button class="icon-btn" style="margin-top:14px" onclick="resetFilters()">Filter zurücksetzen</button></div>`;
+}
+
+/* ---------------- drawer ---------------- */
+let lastFocus = null;
+
+function openDrawer({ kicker, title, body }) {
+  lastFocus = document.activeElement;
+  $("#drawer-kicker").textContent = kicker;
+  $("#drawer-title").textContent = title;
+  $("#drawer-body").innerHTML = body;
+  const scrim = $("#scrim");
+  const drawer = $("#drawer");
+  scrim.hidden = false;
+  void scrim.offsetWidth;  // flush layout so the transition runs
+  scrim.classList.add("open");
+  drawer.classList.add("open");
+  drawer.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  requestAnimationFrame(() => $("#drawer-close").focus());
+}
+
+function closeDrawer() {
+  $("#scrim").classList.remove("open");
+  $("#drawer").classList.remove("open");
+  $("#drawer").setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  setTimeout(() => { $("#scrim").hidden = true; }, 220);
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+  history.replaceState(null, "", location.pathname + location.search);
+}
+
+function sourcesBlock(item) {
+  if (!item.sources || !item.sources.length) return "";
+  return `<div class="section"><h4>Quellen</h4><ul class="src-list">
+    ${item.sources.map(url => `<li><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(url)}</a></li>`).join("")}
+  </ul></div>`;
+}
+
+function confidenceBlock(item) {
+  const bits = [];
+  if (item.confidence) bits.push(`Konfidenz: <strong>${esc(item.confidence)}</strong>`);
+  if (item.verified_at) bits.push(`geprüft: ${esc(item.verified_at)}`);
+  return bits.length ? `<div class="section"><h4>Datenqualität</h4><p>${bits.join(" · ")}</p></div>` : "";
+}
+
+function heroDrawer(slug) {
+  const hero = HERO[slug];
+  if (!hero) return;
+  const role = ROLE[hero.subclass];
+  const abilities = hero.abilities.length
+    ? `<ul class="plain">${hero.abilities.map(a => `<li><strong>${esc(a.name)}</strong> · ${esc(a.kind)}</li>`).join("")}</ul>`
+    : `<p>Keine Fähigkeitsnamen öffentlich belegt. Das Feld bleibt bewusst leer, statt Werte zu erfinden.</p>`;
+  const body = `
+    <div class="section"><h4>Einordnung</h4>
+      <dl class="kv">
+        <dt>Subklasse</dt><dd>${esc(role?.name || hero.subclass)}</dd>
+        <dt>Overwatch-Klasse</dt><dd>${esc(hero.overwatch_class)}</dd>
+        <dt>Status</dt><dd>${hero.status === "live" ? "spielbar" : "angekündigt"}</dd>
+        <dt>Seit</dt><dd>${esc(hero.first_playable || "—")}</dd>
+        ${hero.aliases.length ? `<dt>Aliase</dt><dd>${esc(hero.aliases.join(", "))}</dd>` : ""}
+      </dl>
+    </div>
+    <div class="section"><h4>Notiz</h4><p>${esc(hero.notes || "—")}</p></div>
+    <div class="section"><h4>Fähigkeiten</h4>${abilities}</div>
+    ${confidenceBlock(hero)}
+    ${sourcesBlock(hero)}`;
+  openDrawer({ kicker: role?.name || hero.subclass, title: hero.name, body });
+  history.replaceState(null, "", "#hero/" + hero.slug);
+}
+
+function modeDrawer(slug) {
+  const mode = MODE[slug];
+  if (!mode) return;
+  const body = `
+    <div class="section"><h4>Ablauf</h4><p>${esc(mode.objective)}</p></div>
+    <div class="section"><h4>Format</h4>
+      <dl class="kv">
+        <dt>Teamgröße</dt><dd>${mode.team_size} pro Team</dd>
+        <dt>Teams</dt><dd>${mode.teams ?? "offen"}</dd>
+      </dl>
+    </div>
+    <div class="section"><h4>Beschreibung</h4><p>${esc(mode.description)}</p></div>
+    ${confidenceBlock(mode)}${sourcesBlock(mode)}`;
+  openDrawer({ kicker: mode.teams ? `${mode.teams} Teams` : "Modus", title: mode.name, body });
+  history.replaceState(null, "", "#mode/" + mode.slug);
+}
+
+function mapDrawer(slug) {
+  const item = MAP[slug];
+  if (!item) return;
+  const body = `
+    <div class="section"><h4>Herkunft</h4>
+      <dl class="kv">
+        <dt>Overwatch-Vorlage</dt><dd>${esc(item.inspired_by || "—")}</dd>
+        <dt>Bauweise</dt><dd>${item.built_from_scratch ? "neu für Rush gebaut" : "Port"}</dd>
+        <dt>Setting</dt><dd>${esc(item.setting || "—")}</dd>
+      </dl>
+    </div>
+    ${confidenceBlock(item)}${sourcesBlock(item)}`;
+  openDrawer({ kicker: "Map", title: item.name, body });
+  history.replaceState(null, "", "#map/" + item.slug);
+}
+
+function roleDrawer(slug) {
+  const role = ROLE[slug];
+  if (!role) return;
+  const heroes = DATA.heroes.filter(h => h.subclass === slug);
+  const body = `
+    <div class="section"><h4>Spielweise</h4><p>${esc(role.playstyle)}</p></div>
+    <div class="section"><h4>Beschreibung</h4><p>${esc(role.description)}</p></div>
+    <div class="section"><h4>Helden in dieser Rolle</h4>
+      <ul class="plain">${heroes.map(h => `<li>${esc(h.name)} <span class="tag ${h.status}">${h.status === "live" ? "spielbar" : "angekündigt"}</span></li>`).join("") || "<li>—</li>"}</ul>
+    </div>
+    ${confidenceBlock(role)}${sourcesBlock(role)}`;
+  openDrawer({ kicker: "Subklasse", title: role.name, body });
+  history.replaceState(null, "", "#role/" + role.slug);
+}
+
+/* ---------------- navigation ---------------- */
+function setTab(name, { scroll = false } = {}) {
+  if (!["heroes", "modes", "maps", "roles", "data"].includes(name)) name = "heroes";
+  state.tab = name;
+  $$(".tab").forEach(tab => tab.setAttribute("aria-selected", String(tab.dataset.tab === name)));
+  if (scroll) $("#view").scrollIntoView({ behavior: "smooth", block: "start" });
+  render();
+}
+
+function resetFilters() {
+  state.q = ""; state.role = "all"; state.status = "all";
+  $("#q").value = "";
+  $$("[data-role], [data-status]").forEach(chip => {
+    const own = chip.dataset.role ?? chip.dataset.status;
+    chip.setAttribute("aria-pressed", String(own === "all"));
+  });
+  render();
+}
+
+function updateHash() {
+  if ($("#drawer").classList.contains("open")) return;
+  const params = new URLSearchParams();
+  if (state.q) params.set("q", state.q);
+  if (state.role !== "all") params.set("role", state.role);
+  if (state.status !== "all") params.set("status", state.status);
+  if (state.view !== "cards") params.set("view", state.view);
+  const query = params.toString();
+  history.replaceState(null, "", "#" + state.tab + (query ? "?" + query : ""));
+}
+
+function applyHash() {
+  const raw = location.hash.replace(/^#/, "");
+  if (!raw) return;
+  const [path, query] = raw.split("?");
+  const parts = path.split("/");
+  const params = new URLSearchParams(query || "");
+
+  if (parts[0] === "hero" && HERO[parts[1]]) { setTab("heroes"); heroDrawer(parts[1]); return; }
+  if (parts[0] === "mode" && MODE[parts[1]]) { setTab("modes"); modeDrawer(parts[1]); return; }
+  if (parts[0] === "map" && MAP[parts[1]]) { setTab("maps"); mapDrawer(parts[1]); return; }
+  if (parts[0] === "role" && ROLE[parts[1]]) { setTab("roles"); roleDrawer(parts[1]); return; }
+  if (["heroes", "modes", "maps", "roles", "data"].includes(parts[0])) {
+    state.q = params.get("q") || "";
+    state.role = params.get("role") || "all";
+    state.status = params.get("status") || "all";
+    state.view = params.get("view") === "table" ? "table" : "cards";
+    $("#q").value = state.q;
+    $$("[data-role], [data-status]").forEach(chip => {
+      const own = chip.dataset.role ?? chip.dataset.status;
+      const wanted = chip.dataset.role ? state.role : state.status;
+      chip.setAttribute("aria-pressed", String(own === wanted || (own === "all" && wanted === "all")));
+    });
+    setTab(parts[0]);
+  }
+}
+
+/* ---------------- events ---------------- */
+$("#q").addEventListener("input", event => {
+  state.q = event.target.value.trim().toLowerCase();
+  render();
 });
-document.querySelectorAll(".chip[data-filter]").forEach(el => el.addEventListener("click", () => {
-  state.filter = el.dataset.filter; render();
-}));
-document.querySelectorAll(".tab").forEach(el => el.addEventListener("click", () => {
-  state.tab = el.dataset.tab;
-  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t === el)));
+
+$$(".tab").forEach(tab => tab.addEventListener("click", () => setTab(tab.dataset.tab)));
+
+$("#role-chips").addEventListener("click", event => {
+  const chip = event.target.closest("[data-role]");
+  if (!chip) return;
+  state.role = chip.dataset.role;
+  $$("[data-role]").forEach(el => el.setAttribute("aria-pressed", String(el === chip)));
+  render();
+});
+
+$$("[data-status]").forEach(chip => chip.addEventListener("click", () => {
+  state.status = chip.dataset.status;
+  $$("[data-status]").forEach(el => el.setAttribute("aria-pressed", String(el === chip)));
   render();
 }));
-document.querySelectorAll(".chip[data-filter]").forEach(el => {
-  if (state.tab !== "heroes") el.style.display = "none";
+
+$("#view-toggle").addEventListener("click", () => {
+  state.view = state.view === "table" ? "cards" : "table";
+  render();
 });
-render();
+
+$("#copy-link").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(location.href);
+    toast("Link kopiert");
+  } catch {
+    toast("Kopieren nicht erlaubt — URL aus der Adresszeile nehmen");
+  }
+});
+
+function toast(message) {
+  const el = $("#toast");
+  el.textContent = message;
+  el.classList.add("show");
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => el.classList.remove("show"), 1800);
+}
+
+document.addEventListener("click", event => {
+  const heroEl = event.target.closest("[data-hero]");
+  if (heroEl) { heroDrawer(heroEl.dataset.hero); return; }
+  const modeEl = event.target.closest("[data-mode]");
+  if (modeEl) { modeDrawer(modeEl.dataset.mode); return; }
+  const mapEl = event.target.closest("[data-map]");
+  if (mapEl) { mapDrawer(mapEl.dataset.map); return; }
+  const roleEl = event.target.closest("[data-role]");
+  if (roleEl) { roleDrawer(roleEl.dataset.role); return; }
+  const sortEl = event.target.closest("[data-sort]");
+  if (sortEl) {
+    const key = sortEl.dataset.sort;
+    state.dir = state.sort === key ? -state.dir : 1;
+    state.sort = key;
+    render();
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && $("#drawer").classList.contains("open")) { closeDrawer(); return; }
+  if (event.key === "/" && document.activeElement !== $("#q")) {
+    event.preventDefault();
+    $("#q").focus();
+    $("#q").select();
+  }
+  if ((event.key === "Enter" || event.key === " ") && document.activeElement?.dataset) {
+    const el = document.activeElement;
+    if (el.dataset.hero) { event.preventDefault(); heroDrawer(el.dataset.hero); }
+    else if (el.dataset.mode) { event.preventDefault(); modeDrawer(el.dataset.mode); }
+    else if (el.dataset.map) { event.preventDefault(); mapDrawer(el.dataset.map); }
+    else if (el.dataset.role) { event.preventDefault(); roleDrawer(el.dataset.role); }
+  }
+  if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+    const tabs = $$(".tab");
+    const index = tabs.indexOf(document.activeElement);
+    if (index === -1) return;
+    const next = tabs[(index + (event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+    next.focus();
+    setTab(next.dataset.tab);
+  }
+});
+
+$("#drawer-close").addEventListener("click", closeDrawer);
+$("#scrim").addEventListener("click", closeDrawer);
+window.addEventListener("hashchange", applyHash);
+
+/* ---------------- boot ---------------- */
+applyHash();
+if (!location.hash) setTab("heroes");
 </script>
 </body>
 </html>

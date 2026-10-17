@@ -24,7 +24,7 @@ ruff format --check .
 pytest -q
 ```
 
-## Testabdeckung (33 Tests)
+## Testabdeckung (67 Tests)
 
 | Datei | Prüft |
 |---|---|
@@ -42,7 +42,7 @@ $ ruff format --check .
 13 files already formatted
 
 $ pytest
-33 passed, 1 warning in 0.20s
+67 passed, 1 warning in 0.58s
 ```
 
 Bekannte Warnung (harmlos, Upstream):
@@ -117,6 +117,44 @@ exit=0
 
 Der Report enthält nur Metadaten; das Paket wurde nicht kopiert
 (`git status` zeigt keine `.apk`/`.xapk`).
+
+## DOM-Nachweis (Standalone-App)
+
+`docs/index.html` wird in jsdom geladen und wie ein Nutzer bedient:
+
+```
+$ npm ci --prefix tests/dom && node tests/dom/check.mjs
+— initial render —
+  PASS  12 Hero-Karten
+  PASS  5 Tabs
+  PASS  erste Stat = 9 spielbar
+  PASS  6 Rollen-Chips
+— tabs —
+  PASS  4 Modus-Karten · 3 Map-Karten · 5 Rollen-Karten
+  PASS  JSON-Ansicht vorhanden · JSON enthält brigitte
+— search & filter —
+  PASS  Suche 'soldier' → 1
+  PASS  Kein Treffer → Empty-State
+  PASS  Filter vanguard → 2
+  PASS  Status upcoming → 3
+— table view & sorting —
+  PASS  Tabelle 12 Zeilen · Sortierung dreht Reihenfolge
+— drawer —
+  PASS  Drawer öffnet · Titel = Brigitte
+  PASS  Fähigkeit Shield Bash sichtbar · Whip Shot sichtbar
+  PASS  Quellen-Links vorhanden · Status spielbar sichtbar
+  PASS  Deep-Link gesetzt · Esc schließt Drawer
+— keyboard —
+  PASS  / fokussiert Suche
+— deep link restore —
+  PASS  Deep-Link #hero/mercy öffnet Drawer · zeigt Mercy
+
+ALL CHECKS PASSED
+```
+
+Dabei gefundener und behobener Fehler: der Drawer setzte seine `open`-Klasse
+erst im `requestAnimationFrame`, wodurch er in Umgebungen ohne Frame-Takt nicht
+als offen galt. Jetzt synchron, Fokus weiterhin im nächsten Frame.
 
 ## CI
 

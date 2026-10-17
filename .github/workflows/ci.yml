@@ -46,3 +46,21 @@ jobs:
             exit 1
           fi
           echo "no game binaries tracked"
+
+  dom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install jsdom
+        run: npm ci --prefix tests/dom --no-audit --no-fund
+
+      - name: Rebuild standalone page (stdlib only)
+        run: python3 scripts/build_static.py
+
+      - name: DOM smoke test
+        run: node tests/dom/check.mjs

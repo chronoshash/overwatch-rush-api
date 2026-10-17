@@ -41,15 +41,33 @@ Der Dienst läuft hinter einem Preview-Proxy, deshalb setzt das Skript:
 Bei fehlenden Abhängigkeiten bricht es mit einer klaren Anleitung ab, statt
 mit `ImportError`.
 
-## Ohne Server ansehen
+## Standalone-App (eine HTML-Datei)
 
-`docs/index.html` ist eine **komplett statische** Variante (Daten eingebettet,
-kein CDN, kein JS-Framework) mit Suche, Subklassen-Filter und Tabs für Helden,
-Modi und Maps. Direkt im Browser öffnen – funktioniert auch per `file://`.
+`docs/index.html` ist der komplette Explorer als **einzelne Datei**: ~45 KB,
+HTML/CSS/Vanilla-JS, Daten eingebettet, **null externe Requests**. Kein Build,
+kein Server, kein Framework, kein CDN — funktioniert per `file://`, im
+Arena-Viewer und auf GitHub Pages.
+
+Features:
+
+- Tabs **Helden · Modi · Maps · Subklassen · Rohdaten (JSON)**
+- Live-Suche mit `/`-Shortcut, Rollen- und Status-Filter
+- Umschaltbare **Tabelle** mit sortierbaren Spalten
+- **Detail-Drawer** je Eintrag: Fähigkeiten, Overwatch-Klasse, Konfidenz,
+  Prüfdatum und **Quellenlinks**; schließt mit `Esc`
+- **Deep-Links** (`#hero/tracer`, `#map/mansion-portero`, `#modes?role=utility`)
+- Tastaturbedienung, `aria`-Rollen, `prefers-reduced-motion`
 
 ```bash
 python scripts/build_static.py          # neu generieren
-python scripts/build_static.py --check  # in CI: schlägt bei veralteter Datei fehl
+python scripts/build_static.py --check  # CI: schlägt bei veralteter Datei fehl
+```
+
+Verifikation der UI in einer echten DOM-Umgebung (jsdom, 27 Assertions):
+
+```bash
+npm ci --prefix tests/dom
+node tests/dom/check.mjs
 ```
 
 ## Endpunkte
