@@ -162,6 +162,38 @@ Datenänderungen erfolgen in `data/*.json`; `pytest` erzwingt danach gültige
 Quellen und Referenzen. Siehe [SPEC.md](SPEC.md) für Ziele und Ausschlüsse,
 [TESTING.md](TESTING.md) für Nachweise und [AGENTS.md](AGENTS.md) für Regeln.
 
+## Kann man nicht wie RoyaleAPI die App-Dateien auslesen?
+
+RoyaleAPI macht **zwei** Dinge, die oft verwechselt werden:
+
+| RoyaleAPI-Feature | Quelle | Auf Rush übertragbar |
+|---|---|---|
+| Player-Stats, Battles, Decks | Supercells **offizielle API** | ❌ Overwatch hat keine |
+| Kartenwerte, Arenen, Konstanten | Client-Datamining (`cr-api-data`: „Static data and constants") | ✅ ja |
+
+Der Spielerteil kommt also **nicht** aus der APK, sondern aus einer offiziellen
+API. Der statische Teil lässt sich sehr wohl auslesen — das ist genau der Weg
+hier. Overwatch Rush läuft auf Unity, deshalb liegen Heldendaten in
+`assets/bin/Data/*.assets`, AssetBundles und teils als JSON/CSV in
+`StreamingAssets`.
+
+```bash
+# 1) lokal (auf deinem Rechner) die Datei in tmp/ legen, dann scannen:
+python scripts/scan_game_data.py tmp/overwatch-rush.xapk
+
+# Ergebnis: tmp/game_scan/report.json + kleine Text-Configs
+#   - erkennt Unity-Version, AssetBundles, il2cpp
+#   - findet Heldnamen in Binärblobs (Beweis, wo die Daten liegen)
+#   - extrahiert nur kleine Text-Configs, keine Assets
+```
+
+Danach entscheidet der Report, ob [AssetRipper](https://github.com/AssetRipper/AssetRipper)
+für die `.assets`/`.bundle`-Dateien nötig ist. Was daraus in `data/*.json`
+wandert, sind **nur Namen und Zahlen mit Quelle** – niemals Dateien.
+
+**Was auch Datamining nicht liefert:** Match-History und Stats anderer Spieler.
+Die liegen serverseitig.
+
 ## Warum keine Live-Spielerdaten?
 
 Häufige Frage, klare Antwort: **geht nicht** – nicht „noch nicht".

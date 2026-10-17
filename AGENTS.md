@@ -14,7 +14,10 @@ Regeln für Agenten, die in diesem Repo arbeiten. Gültig ab 2026-10-17.
 4. **Keine Live-Spielerdaten.** Kein Scraping von Blizzard-Endpunkten, keine
    Reverse-Engineering-APIs, kein TLS-MITM, keine fremden Accounts. Begründung
    und Alternativen: `SPEC.md` Abschnitt 2a.
-5. **Markenrechte respektieren.** Kein Branding, das eine offizielle
+5. **Datamining nur für Fakten.** Statische Werte dürfen lokal gescannt werden
+   (`scripts/scan_game_data.py`); in `data/*.json` kommen nur Namen/Zahlen mit
+   Quellenangabe. Keine extrahierten Assets, Texte oder Client-Dateien im Repo.
+6. **Markenrechte respektieren.** Kein Branding, das eine offizielle
    Blizzard-Verbindung suggeriert.
 
 ## Arbeitsweise

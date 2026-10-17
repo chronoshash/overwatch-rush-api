@@ -50,6 +50,27 @@ sie weiterzuverbreiten; Assets bleiben tabu, Zahlen nur als belegte Fakten.
 **Was daraus folgt:** Dieses Projekt bleibt bei Stammdaten. Alles andere wäre
 entweder erfunden, illegal oder beides.
 
+### 2b. Statische Client-Daten (Datamining) – erlaubt, mit Regeln
+
+RoyaleAPI bezieht Spieler-Stats aus Supercells offizieller API, nicht aus der
+APK; aus dem Client stammen dort nur statische Konstanten (`cr-api-data`).
+
+Für Rush gilt derselbe Trennschnitt. Statische Werte (Helden-IDs, Fähigkeits-
+namen, Balance-Zahlen, Talent-/Mod-Listen) dürfen aus dem Client gelesen werden,
+weil es Fakten ohne Assets sind. Regeln:
+
+1. **Nur lokal.** `scripts/scan_game_data.py` läuft auf dem Rechner des Nutzers,
+   schreibt nach `tmp/` (git-ignored) und lädt nichts hoch.
+2. **Nur Fakten.** In `data/*.json` kommen Namen/Zahlen mit Quelle
+   (`source: "local client scan, package sha256 …"`), keine Textblöcke,
+   keine Bilder, keine Binärdateien.
+3. **Keine Spieler-Daten.** Die existieren im Client nicht.
+4. **Graubereich benennen.** Datamining kann gegen die EULA-RE-Klausel verstoßen;
+   das Projekt veröffentlicht deshalb keine extrahierten Assets und keine
+   Client-Dateien, nur aggregierte Fakten.
+5. **Version dokumentieren.** Jeder Scan-Report nennt `package_sha256` und
+   `unity_version`, damit Werte reproduzierbar bleiben.
+
 ## 3. Datenquellen (Primärquellen zuerst)
 
 | Quelle | Nutzung |
