@@ -24,11 +24,11 @@ ruff format --check .
 pytest -q
 ```
 
-## Testabdeckung (32 Tests)
+## Testabdeckung (33 Tests)
 
 | Datei | Prüft |
 |---|---|
-| `tests/test_api.py` | Startseite `/`, JSON-Index `/v1`, Health, Meta, Filter (`subclass`, `status`, `q`), Alias-Lookup, Pagination, 400/404/422-Envelopes, Suche, ETag/304, CORS, OpenAPI |
+| `tests/test_api.py` | Startseite `/`, JSON-Index `/v1`, HEAD==GET, Health, Meta, Filter (`subclass`, `status`, `q`), Alias-Lookup, Pagination, 400/404/422-Envelopes, Suche, ETag/304, CORS, OpenAPI |
 | `tests/test_data.py` | Quellen-Pflicht (https), Subklassen-Referenzen, 9 live + 3 upcoming, nur belegte Abilities, `data_version`-Format, **Binary-Guard** (keine `.apk`/`.xapk` im Tree) |
 | `tests/test_ingest.py` | XAPK-Manifest-Parsing, APK ohne Manifest, fehlende Datei (Exit 2), Nicht-ZIP (Exit 3), CLI-Ausgabe, Pfad-Traversal-Schutz beim Entpacken |
 
@@ -42,7 +42,7 @@ $ ruff format --check .
 13 files already formatted
 
 $ pytest
-32 passed, 1 warning in 0.17s
+33 passed, 1 warning in 0.20s
 ```
 
 Bekannte Warnung (harmlos, Upstream):
@@ -71,7 +71,18 @@ status=304 bytes=0
 $ curl localhost:8000/v1/heroes/nobody   → 404 {"error":{"code":"hero_not_found",...}}
 $ curl "localhost:8000/v1/heroes?subclass=tank" → 400 {"error":{"code":"unknown_subclass",...}}
 $ curl localhost:8000/docs → 200   /openapi.json → 200
+
+$ curl -I localhost:8000/          → 200 (vorher 405, siehe unten)
+$ curl -I localhost:8000/v1/heroes → 200, content-length 5774
 ```
+
+### Behobener Preview-Blocker
+
+Starlette registriert HEAD nicht automatisch für GET-Routen (anders als Flask).
+Ein `HEAD /` lieferte **405**, was Preview-Proxies/Uptime-Checks, die zuerst
+per HEAD sondieren, als kaputt erscheinen lässt. `app/head.py` schreibt HEAD
+intern auf GET um und verwirft den Body (Header inkl. `content-length` bleiben,
+RFC 9110). Test: `test_head_matches_get`.
 
 ## Ingest-Nachweis (synthetische Fixture)
 

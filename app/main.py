@@ -13,6 +13,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict
 
 from app.cache import make_etag
+from app.head import HeadAsGetMiddleware
 from app.models import GameMeta, Hero, MapFeature, Mode, Subclass
 from app.store import get_dataset
 
@@ -31,6 +32,7 @@ app = FastAPI(
     license_info={"name": "MIT"},
 )
 
+app.add_middleware(HeadAsGetMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

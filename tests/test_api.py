@@ -18,6 +18,21 @@ def test_v1_json_index(client: TestClient) -> None:
     assert "/v1/heroes" in body["endpoints"]
 
 
+def test_head_matches_get(client: TestClient) -> None:
+    """Preview proxies probe with HEAD; a 405 breaks the preview iframe."""
+    head = client.head("/")
+    get = client.get("/")
+    assert head.status_code == 200
+    assert head.content == b""
+    assert head.headers["content-type"].startswith("text/html")
+    assert head.headers["content-length"] == get.headers["content-length"]
+
+    assert client.head("/health").status_code == 200
+    assert client.head("/v1/heroes").status_code == 200
+    assert client.head("/v1/heroes/nobody").status_code == 404
+    assert client.head("/nope").status_code == 404
+
+
 def test_health(client: TestClient) -> None:
     response = client.get("/health")
     assert response.status_code == 200

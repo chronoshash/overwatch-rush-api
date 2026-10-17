@@ -22,7 +22,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
 ```bash
-pytest            # 32 Tests
+pytest            # 33 Tests
 ruff check .      # Lint
 ruff format --check .
 ```
@@ -67,6 +67,8 @@ Fehler:
 { "error": { "code": "unknown_subclass", "message": "Unknown subclass 'tank'.",
              "detail": { "valid": ["assassin", "fighter", "long_ranger", "utility", "vanguard"] } } }
 ```
+
+`HEAD` verhält sich wie `GET` (ohne Body) – nötig für Preview- und Uptime-Proxies.
 
 Jede GET-JSON-Antwort trägt einen `ETag` und `Cache-Control: public, max-age=60`.
 Mit `If-None-Match` antwortet der Dienst mit `304` und leerem Body.
@@ -128,7 +130,7 @@ app/
   cache.py       ETag-Berechnung
 data/            Das eigentliche Datenset (JSON, versioniert)
 scripts/         fetch_xapk.sh (lokal), ingest_local.py (Metadaten)
-tests/           32 Tests: API, Datenintegrität, Ingest, Binary-Guard
+tests/           33 Tests: API, Datenintegrität, Ingest, Binary-Guard
 ```
 
 Datenänderungen erfolgen in `data/*.json`; `pytest` erzwingt danach gültige

@@ -69,6 +69,7 @@ Fehler: `{ "error": { code, message, detail } }`.
 - **Determinismus:** stabile Sortierung (live zuerst, dann Name), identische Anfrage ⇒ identischer ETag.
 - **Validierung:** Dataset wird beim Start strikt gegen Pydantic-Modelle geprüft (`extra="forbid"`); kaputte Daten starten den Dienst nicht.
 - **CORS:** offen für Lesezugriff (`*`), da rein öffentliche Daten.
+- **HEAD:** identisch zu GET ohne Body (`app/head.py`), damit Proxies/Healthchecks nicht 405 sehen.
 
 ## 7. Erfolgskriterien (überprüfbar)
 
